@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0B0F19" />
+  <meta name="description" content="Web30 — 30 Days of Interactive HTML, CSS & JavaScript. Build and launch your own website from scratch." />
+  <title>Web30 — 30 Days of HTML, CSS &amp; JS</title>
+
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script>
+  window.onerror = (msg, src, line, col) => {
+    document.body.insertAdjacentHTML('afterbegin',
+      `<div style="background:#7f1d1d;color:#fff;padding:12px;font-family:monospace;font-size:12px;z-index:9999;position:relative;">
+        Error: ${msg} (Line ${line}:${col})
+      </div>`
+    );
+  };
+</script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- JSZip for 1-Click Website Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      background-color: #0B0F19;
+      color: #F1F5F9;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .code-editor {
+      font-family: 'JetBrains Mono', monospace;
+      tab-size: 2;
+      line-height: 1.55;
+      resize: vertical;
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 999px; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col bg-[#0B0F19] text-slate-100 pb-24">
+
+  <!-- Top Sticky Header -->
+  <header class="sticky top-0 z-40 bg-[#0B0F19]/90 backdrop-blur-md border-b border-slate-800/80 px-4 py-3">
+    <div class="max-w-4xl mx-auto flex items-center justify-between gap-2">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20 font-mono font-extrabold text-slate-950 text-sm">
+          &lt;/&gt;
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="font-extrabold text-lg tracking-tight text-white">Web30</span>
+            <span class="text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-md bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+              30 DAYS
+            </span>
+          </div>
+          <div class="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>Live Browser Sandbox Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <div class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-1.5 text-xs font-bold text-amber-400" title="Daily Streak">
+          <span>🔥</span>
+          <span id="header-streak">1d</span>
+        </div>
+        <div class="px-2.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 flex items-center gap-1.5 text-xs font-bold text-emerald-400" title="Total XP">
+          <span>⚡</span>
+          <span id="header-xp">0 XP</span>
+        </div>
+        <button id="open-settings-btn" aria-label="Settings" class="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:border-slate-700 transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main id="app-main" class="flex-1 max-w-4xl w-full mx-auto px-4 pt-5"></main>
+
+  <!-- Bottom Navigation Bar (4 Tabs matching Py30) -->
+  <nav class="fixed bottom-0 inset-x-0 z-40 bg-[#0B0F19]/95 backdrop-blur-md border-t border-slate-800/90 px-2 py-2">
+    <div class="max-w-md mx-auto grid grid-cols-4 gap-1.5">
+      <button data-tab="curriculum" class="nav-tab flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold transition">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+        </svg>
+        <span>Curriculum</span>
+      </button>
+
+      <button data-tab="playground" class="nav-tab flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold transition">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span>Playground</span>
+      </button>
+
+      <button data-tab="progress" class="nav-tab flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold transition">
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+        </svg>
+        <span>Progress</span>
+      </button>
+
+      <button data-tab="webbuddy" class="nav-tab relative flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold transition">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 absolute top-2 right-4"></span>
+        <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+        <span>WebBuddy</span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Settings Modal -->
+  <dialog id="settings-modal" class="bg-slate-900 text-slate-100 border border-slate-700 rounded-2xl p-5 max-w-md w-[92%] backdrop:bg-black/75">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-bold">Web30 Studio Settings</h2>
+      <button id="close-settings-btn" class="text-slate-400 hover:text-white px-2 py-1 rounded-lg">✕</button>
+    </div>
+    <div class="space-y-4 text-sm">
+      <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+        <p class="font-semibold text-emerald-400 mb-1">Export Your Website (.zip)</p>
+        <p class="text-slate-400 text-xs mb-3">Download your current Playground website as <code>index.html</code>, <code>style.css</code>, and <code>script.js</code> ready for Netlify Drop or GitHub Pages.</p>
+        <button id="settings-export-btn" class="w-full py-2 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition">
+          📦 Download Website (.zip)
+        </button>
+      </div>
+      <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
+        <p class="font-semibold text-rose-400 mb-1">Reset Course Progress</p>
+        <p class="text-slate-400 text-xs mb-3">Clear completed days, XP, and saved Playground code on this device.</p>
+        <button id="reset-progress-btn" class="w-full py-2 px-3 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 text-rose-300 border border-rose-500/30 font-semibold text-xs transition">
+          Reset All Progress
+        </button>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    const LESSONS = [{"id": 1, "phase": 1, "phaseName": "HTML Structure", "title": "HTML5 Document Skeleton", "subtitle": "Create the foundational structure of your personal website", "duration": "10 min", "xp": 100, "concepts": [{"heading": "The Anatomy of an HTML5 Page", "body": "Every website starts with a <!DOCTYPE html> declaration followed by <html>, <head> (metadata & page title), and <body> (everything visible on screen).", "code": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>My Portfolio</title>\n</head>\n<body>\n  <h1>Hello, Web!</h1>\n</body>\n</html>"}, {"heading": "Semantic Main Landmark", "body": "Wrapping your primary page content in a <main> tag helps browsers, search engines, and screen readers identify the core content of your site.", "code": "<main>\n  <h1>Alex Rivera</h1>\n  <p>Building clean, fast websites from scratch.</p>\n</main>"}], "takeaways": ["<!DOCTYPE html> tells the browser to render using modern HTML5 standards.", "<head> holds invisible page settings like <title>, while <body> holds visible elements.", "Every page should have one main <h1> heading describing who or what the site is about."], "challenge": {"prompt": "Build your website's starting skeleton inside <body>: add a <main> element containing an <h1> with your brand or name and a <p> tagline introducing your site.", "hint": "Inside <body>, write <main><h1>Your Name</h1><p>Your tagline here</p></main>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <!-- Add your <main>, <h1>, and <p> below -->\n  \n</body>\n</html>", "starterCss": "body {\n  font-family: system-ui, sans-serif;\n  background: #0f172a;\n  color: #f8fafc;\n  padding: 2rem;\n}", "starterJs": "// JavaScript will power interactivity in Phase 3!\n", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <p>Designing and coding modern web experiences from the ground up.</p>\n  </main>\n</body>\n</html>", "solutionCss": "body {\n  font-family: system-ui, sans-serif;\n  background: #0f172a;\n  color: #f8fafc;\n  padding: 2rem;\n}", "solutionJs": "// JavaScript will power interactivity in Phase 3!\n", "checks": [{"type": "exists", "selector": "main", "msg": "Add a <main> element inside <body>."}, {"type": "exists", "selector": "main h1", "msg": "Include an <h1> heading inside <main>."}, {"type": "exists", "selector": "main p", "msg": "Include a <p> tagline paragraph inside <main>."}]}}, {"id": 2, "phase": 1, "phaseName": "HTML Structure", "title": "Sections, Headings & Text Hierarchy", "subtitle": "Organize your About section with semantic headings and emphasis", "duration": "10 min", "xp": 100, "concepts": [{"heading": "Heading Levels (h1 to h6)", "body": "Use <h1> once for your main title, <h2> for major page sections (like About, Projects, Contact), and <h3> for sub-items inside each section.", "code": "<section id=\"about\">\n  <h2>About Me</h2>\n  <p>I specialize in <strong>responsive design</strong> and <em>clean code</em>.</p>\n</section>"}], "takeaways": ["<section id=\"about\"> groups related content and lets navigation links jump directly to it.", "Use <strong> for important keywords and <em> for subtle emphasis."], "challenge": {"prompt": "Inside <main>, add a <section id=\"about\"> containing an <h2> heading ('About') and at least one <p> paragraph that uses <strong> to highlight a key skill.", "hint": "Add <section id=\"about\"><h2>About</h2><p>I build <strong>web apps</strong>.</p></section> inside <main>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <p>Designing and coding modern web experiences from the ground up.</p>\n    <!-- Add <section id=\"about\"> here -->\n    \n  </main>\n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; line-height: 1.6; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <p>Designing and coding modern web experiences from the ground up.</p>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Hi! I am a creator passionate about <strong>HTML, CSS, and JavaScript</strong>. Over 30 days, this site grows from raw markup into an interactive web app.</p>\n    </section>\n  </main>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; line-height: 1.6; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "section#about", "msg": "Create a <section id=\"about\"> element."}, {"type": "exists", "selector": "section#about h2", "msg": "Add an <h2> heading inside #about."}, {"type": "exists", "selector": "section#about strong", "msg": "Highlight a keyword with <strong> inside your About paragraph."}]}}, {"id": 3, "phase": 1, "phaseName": "HTML Structure", "title": "Header & Navigation Links", "subtitle": "Build a site-wide navigation bar with anchor links", "duration": "12 min", "xp": 110, "concepts": [{"heading": "Semantic <header> and <nav>", "body": "Place your top navigation inside <header><nav>. Anchor tags (<a href=\"#about\">) jump smoothly to any element whose id matches the hash.", "code": "<header>\n  <nav>\n    <a href=\"#about\">About</a>\n    <a href=\"#projects\">Projects</a>\n    <a href=\"#contact\">Contact</a>\n  </nav>\n</header>"}], "takeaways": ["<nav> signals primary navigation links to browsers and assistive devices.", "href=\"#section-id\" links directly to an element with id=\"section-id\" on the same page."], "challenge": {"prompt": "Add a <header> above <main> containing a <nav> with at least 3 <a> navigation links (#about, #projects, #contact).", "hint": "Put <header><nav><a href=\"#about\">About</a> <a href=\"#projects\">Projects</a> <a href=\"#contact\">Contact</a></nav></header> right after <body>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <!-- Add <header> and <nav> here -->\n  \n  <main>\n    <h1>DevCraft Studio</h1>\n    <p>Designing and coding modern web experiences from the ground up.</p>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n    </section>\n  </main>\n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n    </nav>\n  </header>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <p>Designing and coding modern web experiences from the ground up.</p>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n    </section>\n  </main>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "header nav", "msg": "Add a <nav> inside a <header> element."}, {"type": "minCount", "selector": "header nav a", "count": 3, "msg": "Include at least 3 <a> links inside <nav>."}]}}, {"id": 4, "phase": 1, "phaseName": "HTML Structure", "title": "Images, Alt Text & Inline SVG", "subtitle": "Add visual identity with accessible graphics and figures", "duration": "12 min", "xp": 110, "concepts": [{"heading": "Accessible Images & <figure>", "body": "Every <img> must include a descriptive alt attribute for screen readers and fallback display. Wrapping media in <figure> with <figcaption> adds semantic context.", "code": "<figure>\n  <img src=\"https://picsum.photos/seed/code/600/260\" alt=\"Workspace laptop displaying code\">\n  <figcaption>Built with clean semantic HTML</figcaption>\n</figure>"}], "takeaways": ["Always write meaningful alt text describing what an image shows.", "<figure> and <figcaption> pair an image or SVG graphic with its caption."], "challenge": {"prompt": "Add a <figure> inside your #about section containing an <img> with a non-empty alt attribute and a <figcaption>.", "hint": "Use <figure><img src=\"https://picsum.photos/seed/devcraft/600/240\" alt=\"Developer desk\"><figcaption>Crafting web apps</figcaption></figure>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n    </nav>\n  </header>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n      <!-- Add <figure>, <img> with alt, and <figcaption> here -->\n      \n    </section>\n  </main>\n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }\nimg { max-width: 100%; border-radius: 12px; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n    </nav>\n  </header>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n      <figure>\n        <img src=\"https://picsum.photos/seed/devcraft/600/240\" alt=\"Minimalist developer workstation\">\n        <figcaption>Focused on clean architecture and fast performance.</figcaption>\n      </figure>\n    </section>\n  </main>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }\nimg { max-width: 100%; border-radius: 12px; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "figure img[alt]", "msg": "Add an <img> with an alt attribute inside a <figure>."}, {"type": "exists", "selector": "figure figcaption", "msg": "Include a <figcaption> inside your <figure>."}]}}, {"id": 5, "phase": 1, "phaseName": "HTML Structure", "title": "Project Cards with <article>", "subtitle": "Structure your portfolio showcase using reusable card markup", "duration": "12 min", "xp": 120, "concepts": [{"heading": "Self-Contained <article> Cards", "body": "The <article> tag represents a standalone item—such as a portfolio project, blog post, or product card—that makes sense on its own.", "code": "<section id=\"projects\">\n  <h2>Projects</h2>\n  <article class=\"card\">\n    <h3>Weather CLI</h3>\n    <p>Real-time forecast tool.</p>\n  </article>\n</section>"}], "takeaways": ["Use <article class=\"card\"> for repeating content items so CSS Grid can style them uniformly.", "Keep headings inside cards at <h3> since the section title is <h2>."], "challenge": {"prompt": "Create a <section id=\"projects\"> with an <h2> ('Projects') and at least 3 <article class=\"card\"> items, each containing an <h3> title and a <p> summary.", "hint": "Add <section id=\"projects\"><h2>Projects</h2> followed by three <article class=\"card\"><h3>...</h3><p>...</p></article> blocks.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n    </nav>\n  </header>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n    </section>\n    <!-- Add <section id=\"projects\"> with 3 <article class=\"card\"> items -->\n    \n  </main>\n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }\n.card { background: #1e293b; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <header>\n    <nav>\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n    </nav>\n  </header>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"about\">\n      <h2>About</h2>\n      <p>Passionate about <strong>HTML, CSS, and JavaScript</strong>.</p>\n    </section>\n    <section id=\"projects\">\n      <h2>Projects</h2>\n      <article class=\"card\">\n        <h3>TaskFlow Dashboard</h3>\n        <p>Lightweight browser task manager with local storage persistence.</p>\n      </article>\n      <article class=\"card\">\n        <h3>Pulse Weather</h3>\n        <p>Clean forecast interface powered by asynchronous JSON APIs.</p>\n      </article>\n      <article class=\"card\">\n        <h3>Markdown Notes</h3>\n        <p>Distraction-free writing pad with instant live preview.</p>\n      </article>\n    </section>\n  </main>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\na { color: #38bdf8; margin-right: 1rem; }\n.card { background: #1e293b; padding: 1rem; border-radius: 10px; margin-bottom: 1rem; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "section#projects", "msg": "Add a <section id=\"projects\"> element."}, {"type": "minCount", "selector": "section#projects article.card", "count": 3, "msg": "Create at least 3 <article class=\"card\"> elements inside #projects."}, {"type": "minCount", "selector": "section#projects article.card h3", "count": 3, "msg": "Give each project card an <h3> title."}]}}, {"id": 6, "phase": 1, "phaseName": "HTML Structure", "title": "Structured Skills & Pricing Table", "subtitle": "Present tabular data cleanly with thead, tbody, and th", "duration": "12 min", "xp": 120, "concepts": [{"heading": "Semantic HTML Tables", "body": "Use <table> only for structured rows and columns (never page layout). Separate column headers in <thead> using <th> from data rows in <tbody> using <td>.", "code": "<table>\n  <thead>\n    <tr><th>Skill</th><th>Level</th></tr>\n  </thead>\n  <tbody>\n    <tr><td>HTML5</td><td>Proficient</td></tr>\n  </tbody>\n</table>"}], "takeaways": ["<thead> and <tbody> allow screen readers and CSS to distinguish headers from data.", "<th> marks header cells, while <td> holds standard table data cells."], "challenge": {"prompt": "Add a <section id=\"skills\"> containing a <table> with a <thead> (at least 2 <th> columns) and a <tbody> with at least 3 <tr> rows.", "hint": "Build <table><thead><tr><th>Technology</th><th>Focus</th></tr></thead><tbody>...3 rows...</tbody></table>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <!-- Add <section id=\"skills\"> with a semantic <table> below -->\n    \n  </main>\n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\ntable { width: 100%; border-collapse: collapse; margin-top: 1rem; }\nth, td { border: 1px solid #334155; padding: 0.75rem; text-align: left; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"skills\">\n      <h2>Core Stack</h2>\n      <table>\n        <thead>\n          <tr><th>Technology</th><th>Role</th></tr>\n        </thead>\n        <tbody>\n          <tr><td>HTML5</td><td>Semantic page architecture</td></tr>\n          <tr><td>CSS3</td><td>Responsive Grid & Flexbox layout</td></tr>\n          <tr><td>JavaScript</td><td>DOM state & interactive features</td></tr>\n        </tbody>\n      </table>\n    </section>\n  </main>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\ntable { width: 100%; border-collapse: collapse; margin-top: 1rem; }\nth, td { border: 1px solid #334155; padding: 0.75rem; text-align: left; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "table thead th", "msg": "Add a <table> with a <thead> containing <th> header cells."}, {"type": "minCount", "selector": "table tbody tr", "count": 3, "msg": "Include at least 3 <tr> rows inside <tbody>."}]}}, {"id": 7, "phase": 1, "phaseName": "HTML Structure", "title": "Accessible Contact Form & Footer", "subtitle": "Complete Phase 1 by adding user inputs and a semantic footer", "duration": "15 min", "xp": 150, "concepts": [{"heading": "Labels, Inputs & Semantic Footer", "body": "Pair every <input> and <textarea> with a <label for=\"id\"> so tapping the label focuses the input. Close your page with a <footer> element.", "code": "<form id=\"contact-form\">\n  <label for=\"name\">Name</label>\n  <input id=\"name\" type=\"text\" required>\n  <button type=\"submit\">Send</button>\n</form>"}], "takeaways": ["Matching <label for=\"email\"> with <input id=\"email\"> is essential for mobile usability and accessibility.", "Phase 1 Milestone complete: your entire website now has clean semantic HTML!"], "challenge": {"prompt": "Add a <section id=\"contact\"> with a <form id=\"contact-form\"> containing inputs for name and email (with matching <label> tags), a <textarea>, and a submit <button>, plus a <footer> at the bottom.", "hint": "Include <label for=\"name\">Name</label><input id=\"name\" type=\"text\" required>, email input, <textarea id=\"message\"></textarea>, and <button type=\"submit\">Send</button>.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"contact\">\n      <h2>Contact</h2>\n      <!-- Build <form id=\"contact-form\"> here -->\n      \n    </section>\n  </main>\n  <!-- Add <footer> here -->\n  \n</body>\n</html>", "starterCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\nlabel { display: block; margin-top: 0.75rem; }\ninput, textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; }\nbutton { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 700; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <title>DevCraft Studio</title>\n</head>\n<body>\n  <main>\n    <h1>DevCraft Studio</h1>\n    <section id=\"contact\">\n      <h2>Contact</h2>\n      <form id=\"contact-form\">\n        <label for=\"name\">Name</label>\n        <input id=\"name\" name=\"name\" type=\"text\" required>\n        <label for=\"email\">Email</label>\n        <input id=\"email\" name=\"email\" type=\"email\" required>\n        <label for=\"message\">Message</label>\n        <textarea id=\"message\" name=\"message\" rows=\"4\" required></textarea>\n        <button type=\"submit\">Send Message</button>\n      </form>\n    </section>\n  </main>\n  <footer>\n    <p>&copy; 2026 DevCraft Studio. Built from scratch.</p>\n  </footer>\n</body>\n</html>", "solutionCss": "body { font-family: system-ui, sans-serif; background: #0f172a; color: #f8fafc; padding: 2rem; }\nlabel { display: block; margin-top: 0.75rem; }\ninput, textarea { width: 100%; padding: 0.5rem; margin-top: 0.25rem; border-radius: 6px; border: 1px solid #334155; background: #1e293b; color: #fff; }\nbutton { margin-top: 1rem; padding: 0.6rem 1.2rem; background: #38bdf8; color: #0f172a; border: none; border-radius: 6px; font-weight: 700; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "form#contact-form input[type='email']", "msg": "Include an email input (<input type=\"email\">) inside #contact-form."}, {"type": "exists", "selector": "form#contact-form textarea", "msg": "Add a <textarea> for the message inside #contact-form."}, {"type": "exists", "selector": "form#contact-form button[type='submit']", "msg": "Add a <button type=\"submit\"> inside #contact-form."}, {"type": "exists", "selector": "footer", "msg": "Add a <footer> at the bottom of your page."}]}}, {"id": 8, "phase": 2, "phaseName": "CSS Styling", "title": "CSS Custom Properties & Color Palette", "subtitle": "Define reusable theme variables in :root for instant restyling", "duration": "12 min", "xp": 120, "concepts": [{"heading": "CSS Variables (:root)", "body": "Defining colors as custom properties (--bg, --surface, --accent) inside :root lets you update your entire website's color scheme from one place—and powers dark/light mode toggles later.", "code": ":root {\n  --bg: #0b0f19;\n  --surface: #111827;\n  --text: #f1f5f9;\n  --accent: #10b981;\n}\nbody {\n  background-color: var(--bg);\n  color: var(--text);\n}"}], "takeaways": ["Custom properties always start with two dashes (--) and are applied using var(--name).", "High contrast between --bg and --text keeps your site readable on mobile screens."], "challenge": {"prompt": "In the style.css tab, define :root variables (--bg, --surface, --text, --accent) and apply var(--bg) and var(--text) to body, plus var(--surface) to .card.", "hint": "Write :root { --bg: #0b0f19; --surface: #111827; --text: #f8fafc; --accent: #10b981; } and use var(--bg) on body.", "starterHtml": "<header><nav><a href=\"#about\">About</a><a href=\"#projects\">Projects</a></nav></header>\n<main>\n  <h1>DevCraft Studio</h1>\n  <article class=\"card\">\n    <h3>Design System</h3>\n    <p>Powered by CSS Custom Properties.</p>\n  </article>\n</main>", "starterCss": "/* Define :root variables and apply them below */\nbody {\n  font-family: system-ui, sans-serif;\n  padding: 2rem;\n}\n.card {\n  padding: 1.25rem;\n  border-radius: 12px;\n}", "starterJs": "", "solutionHtml": "<header><nav><a href=\"#about\">About</a><a href=\"#projects\">Projects</a></nav></header>\n<main>\n  <h1>DevCraft Studio</h1>\n  <article class=\"card\">\n    <h3>Design System</h3>\n    <p>Powered by CSS Custom Properties.</p>\n  </article>\n</main>", "solutionCss": ":root {\n  --bg: #0b0f19;\n  --surface: #111827;\n  --text: #f8fafc;\n  --accent: #10b981;\n}\nbody {\n  font-family: system-ui, sans-serif;\n  background-color: var(--bg);\n  color: var(--text);\n  padding: 2rem;\n}\na {\n  color: var(--accent);\n  margin-right: 1rem;\n}\n.card {\n  background-color: var(--surface);\n  border: 1px solid #1f2937;\n  padding: 1.25rem;\n  border-radius: 12px;\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": ":root", "msg": "Define a :root selector in style.css."}, {"type": "cssIncludes", "text": "--accent", "msg": "Define an --accent custom property inside :root."}, {"type": "cssIncludes", "text": "var(--", "msg": "Apply your custom properties using var(--...)."}]}}, {"id": 9, "phase": 2, "phaseName": "CSS Styling", "title": "Typography Scale & Readability", "subtitle": "Craft crisp headings and comfortable reading measure with clamp()", "duration": "12 min", "xp": 120, "concepts": [{"heading": "Fluid Typography with clamp()", "body": "clamp(min, preferred, max) scales font sizes smoothly between phones and wide monitors without needing extra breakpoints.", "code": "h1 {\n  font-size: clamp(1.8rem, 4vw, 3rem);\n  letter-spacing: -0.02em;\n  line-height: 1.15;\n}"}], "takeaways": ["Set body line-height to 1.6 for effortless reading.", "Constrain long text paragraphs with max-width: 65ch so lines never become too wide."], "challenge": {"prompt": "In style.css, style h1 using fluid font-size (or rem units) and tight line-height, and set p elements to line-height: 1.6 and max-width: 65ch.", "hint": "Add h1 { font-size: clamp(1.8rem, 4vw, 2.75rem); line-height: 1.15; } and p { line-height: 1.6; max-width: 65ch; }.", "starterHtml": "<main>\n  <h1>Building for the Open Web</h1>\n  <p>Great typography turns plain HTML into a calm, readable experience across phones, tablets, and desktop displays.</p>\n</main>", "starterCss": ":root { --bg: #0b0f19; --text: #f8fafc; --muted: #94a3b8; }\nbody { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; padding: 2rem; }\n/* Add h1 and p typography rules below */\n", "starterJs": "", "solutionHtml": "<main>\n  <h1>Building for the Open Web</h1>\n  <p>Great typography turns plain HTML into a calm, readable experience across phones, tablets, and desktop displays.</p>\n</main>", "solutionCss": ":root { --bg: #0b0f19; --text: #f8fafc; --muted: #94a3b8; }\nbody { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; padding: 2rem; }\nh1 {\n  font-size: clamp(1.8rem, 4vw, 2.75rem);\n  line-height: 1.15;\n  letter-spacing: -0.02em;\n  margin-bottom: 1rem;\n}\np {\n  color: var(--muted);\n  line-height: 1.6;\n  max-width: 65ch;\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "line-height", "msg": "Set line-height on your text elements in style.css."}, {"type": "cssIncludes", "text": "max-width", "msg": "Add max-width (such as 65ch) to keep paragraph lines comfortable to read."}]}}, {"id": 10, "phase": 2, "phaseName": "CSS Styling", "title": "The Box Model & Centered Container", "subtitle": "Master border-box, padding, margin, and max-width containers", "duration": "12 min", "xp": 120, "concepts": [{"heading": "Universal border-box Reset", "body": "By default, CSS adds padding on top of an element's width. Setting * { box-sizing: border-box; } keeps widths predictable everywhere.", "code": "* {\n  box-sizing: border-box;\n}\n.container {\n  max-width: 960px;\n  margin: 0 auto;\n  padding: 0 1.25rem;\n}"}], "takeaways": ["Always start stylesheets with * { box-sizing: border-box; }.", "margin: 0 auto centers any block element that has a max-width."], "challenge": {"prompt": "Add * { box-sizing: border-box; } and style a .container class with max-width: 960px, margin: 0 auto, and horizontal padding.", "hint": "Include * { box-sizing: border-box; } and .container { max-width: 960px; margin: 0 auto; padding: 1.5rem; }.", "starterHtml": "<div class=\"container\">\n  <h1>DevCraft Studio</h1>\n  <div class=\"card\">Centered container layout with predictable box sizing.</div>\n</div>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1.5rem; border-radius: 12px; }\n/* Add * border-box and .container rules below */\n", "starterJs": "", "solutionHtml": "<div class=\"container\">\n  <h1>DevCraft Studio</h1>\n  <div class=\"card\">Centered container layout with predictable box sizing.</div>\n</div>", "solutionCss": "* {\n  box-sizing: border-box;\n}\nbody { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; }\n.container {\n  max-width: 960px;\n  margin: 0 auto;\n  padding: 1.5rem;\n}\n.card { background: #111827; border: 1px solid #1f2937; padding: 1.5rem; border-radius: 12px; }", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "border-box", "msg": "Set box-sizing: border-box in style.css."}, {"type": "cssIncludes", "text": ".container", "msg": "Style the .container class in style.css."}, {"type": "cssIncludes", "text": "auto", "msg": "Center .container horizontally using margin: 0 auto."}]}}, {"id": 11, "phase": 2, "phaseName": "CSS Styling", "title": "Flexbox Navigation Bar", "subtitle": "Align brand logo and navigation links side-by-side with Flexbox", "duration": "14 min", "xp": 130, "concepts": [{"heading": "Flexbox Alignment", "body": "display: flex turns a container into a flexible row. Use justify-content: space-between to push brand and links apart, and align-items: center to vertically center them.", "code": ".navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n}\n.nav-links {\n  display: flex;\n  gap: 1.25rem;\n}"}], "takeaways": ["gap adds clean spacing between flex items without messy margin hacks.", "Flexbox is ideal for 1-dimensional rows like navbars, badges, and button groups."], "challenge": {"prompt": "Use display: flex, justify-content: space-between, and align-items: center on .navbar, and use display: flex with gap on .nav-links.", "hint": "Style .navbar { display: flex; justify-content: space-between; align-items: center; } and .nav-links { display: flex; gap: 1rem; }.", "starterHtml": "<header class=\"navbar\">\n  <span class=\"brand\">DevCraft</span>\n  <nav class=\"nav-links\">\n    <a href=\"#about\">About</a>\n    <a href=\"#projects\">Projects</a>\n    <a href=\"#contact\">Contact</a>\n  </nav>\n</header>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }\n.brand { font-weight: 800; color: #10b981; }\na { color: #cbd5e1; text-decoration: none; }\n/* Style .navbar and .nav-links with Flexbox below */\n", "starterJs": "", "solutionHtml": "<header class=\"navbar\">\n  <span class=\"brand\">DevCraft</span>\n  <nav class=\"nav-links\">\n    <a href=\"#about\">About</a>\n    <a href=\"#projects\">Projects</a>\n    <a href=\"#contact\">Contact</a>\n  </nav>\n</header>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; padding: 1rem; }\n.brand { font-weight: 800; color: #10b981; }\na { color: #cbd5e1; text-decoration: none; }\n.navbar {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 1.5rem;\n  background: #111827;\n  border-radius: 12px;\n}\n.nav-links {\n  display: flex;\n  gap: 1.25rem;\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "display: flex", "msg": "Use display: flex in style.css."}, {"type": "cssIncludes", "text": "space-between", "msg": "Use justify-content: space-between on .navbar."}, {"type": "cssIncludes", "text": "gap", "msg": "Use gap to space out your navigation links."}]}}, {"id": 12, "phase": 2, "phaseName": "CSS Styling", "title": "Responsive CSS Grid Project Gallery", "subtitle": "Arrange project cards into an auto-fitting multi-column grid", "duration": "15 min", "xp": 140, "concepts": [{"heading": "Auto-Fit Grid Columns", "body": "repeat(auto-fit, minmax(220px, 1fr)) automatically creates as many columns as fit on screen and wraps neatly on narrow mobile viewports.", "code": ".projects-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 1rem;\n}"}], "takeaways": ["CSS Grid handles 2-dimensional card layouts cleanly with zero media queries needed.", "minmax(220px, 1fr) guarantees cards never squish narrower than 220px."], "challenge": {"prompt": "Style .projects-grid using display: grid, grid-template-columns with repeat(auto-fit, minmax(200px, 1fr)), and gap: 1rem.", "hint": "Add .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }.", "starterHtml": "<section class=\"projects-grid\">\n  <article class=\"card\"><h3>TaskFlow</h3><p>Productivity app</p></article>\n  <article class=\"card\"><h3>Pulse Weather</h3><p>Live API forecasts</p></article>\n  <article class=\"card\"><h3>CodePad</h3><p>Browser IDE</p></article>\n</section>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1.25rem; border-radius: 12px; }\n/* Turn .projects-grid into a responsive CSS Grid */\n", "starterJs": "", "solutionHtml": "<section class=\"projects-grid\">\n  <article class=\"card\"><h3>TaskFlow</h3><p>Productivity app</p></article>\n  <article class=\"card\"><h3>Pulse Weather</h3><p>Live API forecasts</p></article>\n  <article class=\"card\"><h3>CodePad</h3><p>Browser IDE</p></article>\n</section>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1.25rem; border-radius: 12px; }\n.projects-grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));\n  gap: 1rem;\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "display: grid", "msg": "Set display: grid on .projects-grid."}, {"type": "cssIncludes", "text": "grid-template-columns", "msg": "Define grid-template-columns using repeat(auto-fit, ...)."}]}}, {"id": 13, "phase": 2, "phaseName": "CSS Styling", "title": "Interactive Hover & Focus Transitions", "subtitle": "Add smooth micro-interactions to cards and buttons", "duration": "12 min", "xp": 130, "concepts": [{"heading": "Smooth CSS Transitions", "body": "Adding transition: transform 0.2s ease, border-color 0.2s ease makes hover and keyboard :focus states feel tactile and responsive.", "code": ".btn {\n  background: #10b981;\n  transition: transform 0.2s ease, opacity 0.2s ease;\n}\n.btn:hover {\n  transform: translateY(-2px);\n}"}], "takeaways": ["Always style :focus-visible alongside :hover so keyboard users see active focus.", "Subtle translateY(-2px) lifts give cards tactile depth."], "challenge": {"prompt": "Add a transition rule to .card and .btn, and create a :hover rule that lifts or highlights them on interaction.", "hint": "Add .card { transition: transform 0.2s ease; } and .card:hover { transform: translateY(-3px); border-color: #10b981; }.", "starterHtml": "<article class=\"card\">\n  <h3>Interactive Card</h3>\n  <p>Hover or tap to feel the smooth CSS transition.</p>\n  <button class=\"btn\">Explore Project</button>\n</article>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1.5rem; border-radius: 12px; }\n.btn { background: #10b981; color: #052e16; border: none; padding: 0.65rem 1.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; }\n/* Add transition and :hover rules below */\n", "starterJs": "", "solutionHtml": "<article class=\"card\">\n  <h3>Interactive Card</h3>\n  <p>Hover or tap to feel the smooth CSS transition.</p>\n  <button class=\"btn\">Explore Project</button>\n</article>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }\n.card {\n  background: #111827;\n  border: 1px solid #1f2937;\n  padding: 1.5rem;\n  border-radius: 12px;\n  transition: transform 0.2s ease, border-color 0.2s ease;\n}\n.card:hover {\n  transform: translateY(-3px);\n  border-color: #10b981;\n}\n.btn {\n  background: #10b981;\n  color: #052e16;\n  border: none;\n  padding: 0.65rem 1.2rem;\n  border-radius: 8px;\n  font-weight: 700;\n  cursor: pointer;\n  transition: opacity 0.2s ease;\n}\n.btn:hover {\n  opacity: 0.9;\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "transition", "msg": "Add a transition property in style.css."}, {"type": "cssIncludes", "text": ":hover", "msg": "Define a :hover state in style.css."}]}}, {"id": 14, "phase": 2, "phaseName": "CSS Styling", "title": "Sticky Glassmorphic Header", "subtitle": "Keep your navigation bar pinned at the top while scrolling", "duration": "12 min", "xp": 130, "concepts": [{"heading": "position: sticky & backdrop-filter", "body": "position: sticky with top: 0 keeps your header docked at the top of the viewport as visitors scroll, while backdrop-filter: blur(12px) creates a frosted glass look.", "code": ".sticky-header {\n  position: sticky;\n  top: 0;\n  z-index: 50;\n  background: rgba(11, 15, 25, 0.8);\n  backdrop-filter: blur(12px);\n}"}], "takeaways": ["position: sticky requires a threshold like top: 0 to activate.", "Set z-index: 50 so scrolling cards pass underneath the header cleanly."], "challenge": {"prompt": "Style .sticky-header with position: sticky, top: 0, and backdrop-filter: blur(10px) so it stays pinned as you scroll the tall content below.", "hint": "Add .sticky-header { position: sticky; top: 0; backdrop-filter: blur(10px); background: rgba(15, 23, 42, 0.85); }.", "starterHtml": "<header class=\"sticky-header\">DevCraft Studio — Sticky Bar</header>\n<main style=\"height: 900px; padding-top: 1.5rem;\">\n  <p>Scroll down inside this preview frame to test your sticky header!</p>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; }\n.sticky-header {\n  padding: 1rem 1.5rem;\n  border-bottom: 1px solid #1e293b;\n  font-weight: 700;\n  /* Add sticky positioning and blur below */\n}\nmain { padding: 1.5rem; }", "starterJs": "", "solutionHtml": "<header class=\"sticky-header\">DevCraft Studio — Sticky Bar</header>\n<main style=\"height: 900px; padding-top: 1.5rem;\">\n  <p>Scroll down inside this preview frame to test your sticky header!</p>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; }\n.sticky-header {\n  position: sticky;\n  top: 0;\n  z-index: 50;\n  background: rgba(15, 23, 42, 0.85);\n  backdrop-filter: blur(10px);\n  padding: 1rem 1.5rem;\n  border-bottom: 1px solid #1e293b;\n  font-weight: 700;\n}\nmain { padding: 1.5rem; }", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "sticky", "msg": "Set position: sticky on .sticky-header."}, {"type": "cssIncludes", "text": "backdrop-filter", "msg": "Add backdrop-filter: blur(...) for a frosted glass header."}]}}, {"id": 15, "phase": 2, "phaseName": "CSS Styling", "title": "Responsive Media Queries", "subtitle": "Complete Phase 2 by adapting layouts for narrow phone screens", "duration": "15 min", "xp": 150, "concepts": [{"heading": "@media Breakpoints", "body": "Media queries apply CSS rules only when the viewport matches a condition such as @media (max-width: 600px), allowing multi-column rows to stack cleanly on mobile phones.", "code": "@media (max-width: 600px) {\n  .hero {\n    flex-direction: column;\n    text-align: center;\n  }\n}"}], "takeaways": ["Test every layout at mobile width (~375px) as well as desktop width.", "Phase 2 Milestone complete: your website now has a complete, responsive visual design!"], "challenge": {"prompt": "Add an @media (max-width: 600px) block in style.css that switches .hero to flex-direction: column.", "hint": "Write @media (max-width: 600px) { .hero { flex-direction: column; } } at the bottom of style.css.", "starterHtml": "<section class=\"hero\">\n  <div><h1>DevCraft Studio</h1><p>Mobile-first responsive design.</p></div>\n  <div class=\"badge\">v2.0 Styled</div>\n</section>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.hero { display: flex; justify-content: space-between; align-items: center; gap: 1rem; background: #111827; padding: 1.5rem; border-radius: 12px; }\n.badge { background: #10b981; color: #052e16; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; }\n/* Add @media (max-width: 600px) below */\n", "starterJs": "", "solutionHtml": "<section class=\"hero\">\n  <div><h1>DevCraft Studio</h1><p>Mobile-first responsive design.</p></div>\n  <div class=\"badge\">v2.0 Styled</div>\n</section>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.hero { display: flex; justify-content: space-between; align-items: center; gap: 1rem; background: #111827; padding: 1.5rem; border-radius: 12px; }\n.badge { background: #10b981; color: #052e16; padding: 0.4rem 0.8rem; border-radius: 999px; font-weight: 700; }\n@media (max-width: 600px) {\n  .hero {\n    flex-direction: column;\n    align-items: flex-start;\n  }\n}", "solutionJs": "", "checks": [{"type": "cssIncludes", "text": "@media", "msg": "Add an @media query in style.css."}, {"type": "cssIncludes", "text": "flex-direction", "msg": "Change flex-direction inside your @media query for mobile screens."}]}}, {"id": 16, "phase": 3, "phaseName": "JS Interactivity", "title": "Variables, Template Literals & Console", "subtitle": "Bring JavaScript into your website and log dynamic state", "duration": "12 min", "xp": 130, "concepts": [{"heading": "const, let & Backtick Strings", "body": "Use const for values that stay fixed and let for values that change. Backtick template literals (`Hello ${name}`) embed expressions directly inside strings.", "code": "const siteName = 'DevCraft Studio';\nlet projectCount = 3;\nconsole.log(`${siteName} has ${projectCount} live projects.`);"}], "takeaways": ["Prefer const by default; use let only when a variable will be reassigned.", "console.log() prints live diagnostic messages to the browser console."], "challenge": {"prompt": "In the script.js tab, declare a const siteName and a let projectCount, and log a template literal greeting using console.log().", "hint": "In script.js write: const siteName = 'DevCraft'; let projectCount = 3; console.log(`${siteName}: ${projectCount}`);", "starterHtml": "<main>\n  <h1>DevCraft Studio</h1>\n  <p>Open the Console output below the preview to see your script run!</p>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }", "starterJs": "// Declare const siteName, let projectCount, and call console.log()\n", "solutionHtml": "<main>\n  <h1>DevCraft Studio</h1>\n  <p>Open the Console output below the preview to see your script run!</p>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }", "solutionJs": "const siteName = 'DevCraft Studio';\nlet projectCount = 3;\nconsole.log(`Welcome to ${siteName} — ${projectCount} projects loaded!`);", "checks": [{"type": "jsIncludes", "text": "const", "msg": "Declare a constant using const in script.js."}, {"type": "jsIncludes", "text": "console.log", "msg": "Log output with console.log() in script.js."}]}}, {"id": 17, "phase": 3, "phaseName": "JS Interactivity", "title": "DOM Selection & Dynamic Text", "subtitle": "Update webpage headings and status badges using querySelector", "duration": "12 min", "xp": 130, "concepts": [{"heading": "document.querySelector & textContent", "body": "document.querySelector('#id') grabs any HTML element so JavaScript can safely update its text using .textContent.", "code": "const statusEl = document.querySelector('#status-badge');\nstatusEl.textContent = 'Available for Freelance Work';"}], "takeaways": ["Use .textContent (instead of .innerHTML) whenever inserting plain text to prevent HTML injection.", "querySelector accepts any CSS selector (#id, .class, or tag)."], "challenge": {"prompt": "In script.js, select #status-badge with document.querySelector and change its .textContent to 'Open for Projects'.", "hint": "Write: const badge = document.querySelector('#status-badge'); badge.textContent = 'Open for Projects';", "starterHtml": "<main>\n  <h1>DevCraft Studio</h1>\n  <span id=\"status-badge\" class=\"badge\">Loading status...</span>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }\n.badge { display: inline-block; background: #10b981; color: #052e16; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 700; }", "starterJs": "// Update #status-badge textContent below\n", "solutionHtml": "<main>\n  <h1>DevCraft Studio</h1>\n  <span id=\"status-badge\" class=\"badge\">Loading status...</span>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 2rem; }\n.badge { display: inline-block; background: #10b981; color: #052e16; padding: 0.4rem 0.9rem; border-radius: 999px; font-weight: 700; }", "solutionJs": "const badge = document.querySelector('#status-badge');\nif (badge) {\n  badge.textContent = 'Open for Projects';\n}", "checks": [{"type": "jsIncludes", "text": "querySelector", "msg": "Use document.querySelector in script.js."}, {"type": "textEquals", "selector": "#status-badge", "expected": "Open for Projects", "msg": "#status-badge text should update to 'Open for Projects'."}]}}, {"id": 18, "phase": 3, "phaseName": "JS Interactivity", "title": "Click Events & Dark/Light Theme Toggle", "subtitle": "Respond to user clicks with addEventListener and classList.toggle", "duration": "15 min", "xp": 150, "concepts": [{"heading": "Listening for Clicks", "body": "element.addEventListener('click', () => { ... }) runs your callback every time the user taps a button. Toggling a .light class on document.body switches CSS variables instantaneously.", "code": "const btn = document.querySelector('#theme-btn');\nbtn.addEventListener('click', () => {\n  document.body.classList.toggle('light');\n});"}], "takeaways": ["classList.toggle('light') adds the class if missing and removes it if present.", "Combining CSS variables with classList.toggle makes theme switching effortless."], "challenge": {"prompt": "In script.js, attach a 'click' event listener to #theme-btn that toggles the 'light' class on document.body.", "hint": "document.querySelector('#theme-btn').addEventListener('click', () => document.body.classList.toggle('light'));", "starterHtml": "<header class=\"bar\">\n  <strong>DevCraft</strong>\n  <button id=\"theme-btn\">Toggle Theme</button>\n</header>\n<main><p>Tap the button above to switch between Dark and Light mode!</p></main>", "starterCss": ":root { --bg: #0b0f19; --text: #f8fafc; }\nbody.light { --bg: #f8fafc; --text: #0f172a; }\nbody { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; padding: 1.5rem; transition: background 0.2s, color 0.2s; }\n.bar { display: flex; justify-content: space-between; align-items: center; }\nbutton { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #334155; cursor: pointer; }", "starterJs": "// Add click listener on #theme-btn to toggle 'light' class on document.body\n", "solutionHtml": "<header class=\"bar\">\n  <strong>DevCraft</strong>\n  <button id=\"theme-btn\">Toggle Theme</button>\n</header>\n<main><p>Tap the button above to switch between Dark and Light mode!</p></main>", "solutionCss": ":root { --bg: #0b0f19; --text: #f8fafc; }\nbody.light { --bg: #f8fafc; --text: #0f172a; }\nbody { background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; padding: 1.5rem; transition: background 0.2s, color 0.2s; }\n.bar { display: flex; justify-content: space-between; align-items: center; }\nbutton { padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #334155; cursor: pointer; }", "solutionJs": "const themeBtn = document.querySelector('#theme-btn');\nthemeBtn.addEventListener('click', () => {\n  document.body.classList.toggle('light');\n});", "checks": [{"type": "jsIncludes", "text": "addEventListener", "msg": "Attach an event listener using addEventListener."}, {"type": "clickTogglesClass", "clickSelector": "#theme-btn", "targetSelector": "body", "className": "light", "msg": "Clicking #theme-btn should toggle the 'light' class on <body>."}]}}, {"id": 19, "phase": 3, "phaseName": "JS Interactivity", "title": "Mobile Hamburger Menu Toggle", "subtitle": "Build an interactive mobile navigation drawer", "duration": "14 min", "xp": 140, "concepts": [{"heading": "Accessible Menu State", "body": "When toggling a mobile menu, toggle an .open class on the <nav> element and update aria-expanded on the toggle button so screen readers announce the state.", "code": "menuBtn.addEventListener('click', () => {\n  const isOpen = nav.classList.toggle('open');\n  menuBtn.setAttribute('aria-expanded', String(isOpen));\n});"}], "takeaways": ["classList.toggle() returns true when the class is added and false when removed.", "Updating aria-expanded keeps interactive menus accessible."], "challenge": {"prompt": "Add a click listener to #menu-toggle that toggles the 'open' class on #mobile-nav.", "hint": "Select #menu-toggle and #mobile-nav, then call mobileNav.classList.toggle('open') inside the click handler.", "starterHtml": "<header>\n  <div class=\"top\">\n    <strong>DevCraft</strong>\n    <button id=\"menu-toggle\" aria-expanded=\"false\">☰ Menu</button>\n  </div>\n  <nav id=\"mobile-nav\" class=\"drawer\">\n    <a href=\"#about\">About</a>\n    <a href=\"#projects\">Projects</a>\n    <a href=\"#contact\">Contact</a>\n  </nav>\n</header>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.top { display: flex; justify-content: space-between; align-items: center; }\n.drawer { display: none; flex-direction: column; gap: 0.75rem; margin-top: 1rem; background: #111827; padding: 1rem; border-radius: 10px; }\n.drawer.open { display: flex; }\na { color: #38bdf8; text-decoration: none; }", "starterJs": "// Toggle 'open' class on #mobile-nav when #menu-toggle is clicked\n", "solutionHtml": "<header>\n  <div class=\"top\">\n    <strong>DevCraft</strong>\n    <button id=\"menu-toggle\" aria-expanded=\"false\">☰ Menu</button>\n  </div>\n  <nav id=\"mobile-nav\" class=\"drawer\">\n    <a href=\"#about\">About</a>\n    <a href=\"#projects\">Projects</a>\n    <a href=\"#contact\">Contact</a>\n  </nav>\n</header>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.top { display: flex; justify-content: space-between; align-items: center; }\n.drawer { display: none; flex-direction: column; gap: 0.75rem; margin-top: 1rem; background: #111827; padding: 1rem; border-radius: 10px; }\n.drawer.open { display: flex; }\na { color: #38bdf8; text-decoration: none; }", "solutionJs": "const menuToggle = document.querySelector('#menu-toggle');\nconst mobileNav = document.querySelector('#mobile-nav');\nmenuToggle.addEventListener('click', () => {\n  const open = mobileNav.classList.toggle('open');\n  menuToggle.setAttribute('aria-expanded', String(open));\n});", "checks": [{"type": "clickTogglesClass", "clickSelector": "#menu-toggle", "targetSelector": "#mobile-nav", "className": "open", "msg": "Clicking #menu-toggle should toggle the 'open' class on #mobile-nav."}]}}, {"id": 20, "phase": 3, "phaseName": "JS Interactivity", "title": "Arrays, Objects & Dynamic Cards", "subtitle": "Render your portfolio projects from structured JavaScript data", "duration": "15 min", "xp": 150, "concepts": [{"heading": "Data-Driven Rendering with .map()", "body": "Instead of duplicating HTML cards by hand, store projects in an array of objects and transform them into HTML cards with .map(...).join('').", "code": "const projects = [\n  { title: 'TaskFlow', tag: 'JS' },\n  { title: 'GridLab', tag: 'CSS' }\n];\ncontainer.innerHTML = projects.map(p => `<article class=\"card\"><h3>${p.title}</h3></article>`).join('');"}], "takeaways": ["Separating data (arrays/objects) from presentation (HTML templates) makes adding new projects effortless.", "Always call .join('') after .map() so commas don't appear between cards."], "challenge": {"prompt": "Define a projects array with at least 3 objects (each with title and tag) and render them as <article class=\"card\"> elements inside #project-list.", "hint": "Use projects.map(p => `<article class=\"card\"><h3>${p.title}</h3><span>${p.tag}</span></article>`).join('') and assign it to #project-list.innerHTML.", "starterHtml": "<main>\n  <h2>Dynamic Projects</h2>\n  <div id=\"project-list\" class=\"grid\"></div>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1rem; border-radius: 10px; }", "starterJs": "const projects = [\n  { title: 'TaskFlow', tag: 'Web App' },\n  { title: 'Pulse API', tag: 'JavaScript' },\n  { title: 'GridKit', tag: 'CSS' }\n];\n// Render projects into #project-list below\n", "solutionHtml": "<main>\n  <h2>Dynamic Projects</h2>\n  <div id=\"project-list\" class=\"grid\"></div>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }\n.card { background: #111827; border: 1px solid #1f2937; padding: 1rem; border-radius: 10px; }", "solutionJs": "const projects = [\n  { title: 'TaskFlow', tag: 'Web App' },\n  { title: 'Pulse API', tag: 'JavaScript' },\n  { title: 'GridKit', tag: 'CSS' }\n];\nconst list = document.querySelector('#project-list');\nlist.innerHTML = projects.map(p => `\n  <article class=\"card\">\n    <h3>${p.title}</h3>\n    <small>${p.tag}</small>\n  </article>\n`).join('');", "checks": [{"type": "minCount", "selector": "#project-list .card", "count": 3, "msg": "Render at least 3 .card elements inside #project-list using JavaScript."}]}}, {"id": 21, "phase": 3, "phaseName": "JS Interactivity", "title": "Live Category Filter Buttons", "subtitle": "Filter project cards dynamically using Array.filter() and data attributes", "duration": "15 min", "xp": 150, "concepts": [{"heading": "Filtering with .filter() & data-*", "body": "Custom data-filter=\"css\" attributes on buttons let JavaScript read btn.dataset.filter and filter your array with projects.filter(p => p.category === filter).", "code": "const filtered = category === 'all'\n  ? projects\n  : projects.filter(p => p.category === category);"}], "takeaways": ["data-* attributes store custom metadata directly on HTML buttons.", "Re-rendering from a single render(category) function avoids duplicate DOM logic."], "challenge": {"prompt": "Wire up the filter buttons (.filter-btn) so clicking one filters #project-list to match button.dataset.filter ('all', 'css', or 'js').", "hint": "Loop through document.querySelectorAll('.filter-btn'), listen for 'click', and call renderProjects(btn.dataset.filter).", "starterHtml": "<div class=\"filters\">\n  <button class=\"filter-btn\" data-filter=\"all\">All</button>\n  <button class=\"filter-btn\" data-filter=\"css\">CSS</button>\n  <button class=\"filter-btn\" data-filter=\"js\">JS</button>\n</div>\n<div id=\"project-list\"></div>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; }\nbutton { background: #1e293b; color: #f8fafc; border: 1px solid #334155; padding: 0.4rem 0.9rem; border-radius: 8px; cursor: pointer; }\n.card { background: #111827; padding: 0.9rem; border-radius: 10px; margin-bottom: 0.6rem; }", "starterJs": "const items = [\n  { title: 'FlexNav', category: 'css' },\n  { title: 'ThemeSwitcher', category: 'js' },\n  { title: 'GridGallery', category: 'css' }\n];\nfunction render(cat) {\n  const shown = cat === 'all' ? items : items.filter(i => i.category === cat);\n  document.querySelector('#project-list').innerHTML = shown.map(i => `<article class=\"card\">${i.title} (${i.category})</article>`).join('');\n}\nrender('all');\n// Attach click handlers to .filter-btn elements below\n", "solutionHtml": "<div class=\"filters\">\n  <button class=\"filter-btn\" data-filter=\"all\">All</button>\n  <button class=\"filter-btn\" data-filter=\"css\">CSS</button>\n  <button class=\"filter-btn\" data-filter=\"js\">JS</button>\n</div>\n<div id=\"project-list\"></div>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.filters { display: flex; gap: 0.5rem; margin-bottom: 1rem; }\nbutton { background: #1e293b; color: #f8fafc; border: 1px solid #334155; padding: 0.4rem 0.9rem; border-radius: 8px; cursor: pointer; }\n.card { background: #111827; padding: 0.9rem; border-radius: 10px; margin-bottom: 0.6rem; }", "solutionJs": "const items = [\n  { title: 'FlexNav', category: 'css' },\n  { title: 'ThemeSwitcher', category: 'js' },\n  { title: 'GridGallery', category: 'css' }\n];\nfunction render(cat) {\n  const shown = cat === 'all' ? items : items.filter(i => i.category === cat);\n  document.querySelector('#project-list').innerHTML = shown.map(i => `<article class=\"card\">${i.title} (${i.category})</article>`).join('');\n}\nrender('all');\ndocument.querySelectorAll('.filter-btn').forEach(btn => {\n  btn.addEventListener('click', () => render(btn.dataset.filter));\n});", "checks": [{"type": "jsIncludes", "text": "filter", "msg": "Use .filter() to filter the project items."}, {"type": "minCount", "selector": "#project-list .card", "count": 3, "msg": "Initial render should display all 3 project cards."}]}}, {"id": 22, "phase": 3, "phaseName": "JS Interactivity", "title": "Form Validation & Instant Feedback", "subtitle": "Intercept form submissions with preventDefault() and display feedback", "duration": "15 min", "xp": 150, "concepts": [{"heading": "e.preventDefault() on Submit", "body": "Calling e.preventDefault() stops the browser from reloading the page when a form submits so JavaScript can validate inputs and show an inline confirmation message.", "code": "form.addEventListener('submit', (e) => {\n  e.preventDefault();\n  const name = input.value.trim();\n  if (!name) return;\n  feedback.textContent = `Thanks, ${name}!`;\n});"}], "takeaways": ["Always .trim() user inputs so spaces-only submissions don't slip through.", "Show clear inline status messages rather than intrusive browser alert() popups."], "challenge": {"prompt": "Listen for 'submit' on #contact-form, call e.preventDefault(), check that #visitor-name is not empty, and display a confirmation message inside #form-status.", "hint": "In script.js, handle submit on #contact-form, prevent default, and set #form-status.textContent = `Message received from ${name}!`.", "starterHtml": "<form id=\"contact-form\">\n  <input id=\"visitor-name\" placeholder=\"Your name\">\n  <button type=\"submit\">Send</button>\n</form>\n<p id=\"form-status\"></p>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #fff; }\nbutton { padding: 0.5rem 1rem; border-radius: 6px; background: #10b981; color: #052e16; border: none; font-weight: 700; }", "starterJs": "// Handle #contact-form submit with e.preventDefault() and update #form-status\n", "solutionHtml": "<form id=\"contact-form\">\n  <input id=\"visitor-name\" placeholder=\"Your name\">\n  <button type=\"submit\">Send</button>\n</form>\n<p id=\"form-status\"></p>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #fff; }\nbutton { padding: 0.5rem 1rem; border-radius: 6px; background: #10b981; color: #052e16; border: none; font-weight: 700; }", "solutionJs": "const form = document.querySelector('#contact-form');\nconst nameInput = document.querySelector('#visitor-name');\nconst status = document.querySelector('#form-status');\nform.addEventListener('submit', (e) => {\n  e.preventDefault();\n  const name = nameInput.value.trim();\n  if (!name) {\n    status.textContent = 'Please enter your name first.';\n    return;\n  }\n  status.textContent = `Thanks, ${name}! Your message has been sent.`;\n  form.reset();\n});", "checks": [{"type": "jsIncludes", "text": "preventDefault", "msg": "Call e.preventDefault() inside your submit listener."}, {"type": "jsIncludes", "text": "form-status", "msg": "Update #form-status when the form is submitted."}]}}, {"id": 23, "phase": 3, "phaseName": "JS Interactivity", "title": "Saving State with localStorage", "subtitle": "Complete Phase 3 by remembering visitor preferences across reloads", "duration": "15 min", "xp": 160, "concepts": [{"heading": "Browser Persistence with localStorage", "body": "localStorage.setItem(key, value) saves strings permanently in the user's browser, while localStorage.getItem(key) restores them when they return.", "code": "localStorage.setItem('visitor_note', noteInput.value);\nconst saved = localStorage.getItem('visitor_note') || '';"}], "takeaways": ["localStorage stores strings; use JSON.stringify() and JSON.parse() when saving arrays or objects.", "Phase 3 Milestone complete: your website is now interactive and stateful!"], "challenge": {"prompt": "Save the text typed in #quick-note to localStorage under 'web30_demo_note' when #save-note is clicked, and restore it on page load.", "hint": "On load, set noteInput.value = localStorage.getItem('web30_demo_note') || ''; on click, call localStorage.setItem('web30_demo_note', noteInput.value).", "starterHtml": "<main>\n  <h3>Scratchpad</h3>\n  <input id=\"quick-note\" placeholder=\"Type a note to save...\">\n  <button id=\"save-note\">Save Note</button>\n  <p id=\"note-msg\"></p>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #fff; }\nbutton { padding: 0.5rem 1rem; border-radius: 6px; background: #38bdf8; color: #0f172a; border: none; font-weight: 700; }", "starterJs": "// Restore and save #quick-note using localStorage\n", "solutionHtml": "<main>\n  <h3>Scratchpad</h3>\n  <input id=\"quick-note\" placeholder=\"Type a note to save...\">\n  <button id=\"save-note\">Save Note</button>\n  <p id=\"note-msg\"></p>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { padding: 0.5rem; border-radius: 6px; border: 1px solid #334155; background: #111827; color: #fff; }\nbutton { padding: 0.5rem 1rem; border-radius: 6px; background: #38bdf8; color: #0f172a; border: none; font-weight: 700; }", "solutionJs": "const noteInput = document.querySelector('#quick-note');\nconst saveBtn = document.querySelector('#save-note');\nconst msg = document.querySelector('#note-msg');\nnoteInput.value = localStorage.getItem('web30_demo_note') || '';\nsaveBtn.addEventListener('click', () => {\n  localStorage.setItem('web30_demo_note', noteInput.value);\n  msg.textContent = 'Saved to localStorage!';\n});", "checks": [{"type": "jsIncludes", "text": "localStorage.setItem", "msg": "Save data using localStorage.setItem(...) in script.js."}, {"type": "jsIncludes", "text": "localStorage.getItem", "msg": "Restore saved data using localStorage.getItem(...) in script.js."}]}}, {"id": 24, "phase": 4, "phaseName": "Polish & Launch", "title": "Native <dialog> Project Modal", "subtitle": "Display rich project case studies in an accessible modal dialog", "duration": "14 min", "xp": 150, "concepts": [{"heading": "HTML <dialog> Element", "body": "The native <dialog> element provides built-in Escape-key dismissal, focus trapping, and backdrop styling via dialog.showModal() and dialog.close().", "code": "const modal = document.querySelector('#project-modal');\nopenBtn.addEventListener('click', () => modal.showModal());\ncloseBtn.addEventListener('click', () => modal.close());"}], "takeaways": ["Native <dialog> eliminates dozens of lines of custom modal overlay boilerplate.", "Style ::backdrop in CSS to dim the page behind an open modal."], "challenge": {"prompt": "Connect #open-modal and #close-modal in script.js to call .showModal() and .close() on #project-modal.", "hint": "Use modal.showModal() inside #open-modal's click handler and modal.close() inside #close-modal's click handler.", "starterHtml": "<button id=\"open-modal\">View Case Study</button>\n<dialog id=\"project-modal\">\n  <h3>TaskFlow Architecture</h3>\n  <p>Built with semantic HTML, CSS Grid, and zero external dependencies.</p>\n  <button id=\"close-modal\">Close</button>\n</dialog>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ndialog { background: #111827; color: #f8fafc; border: 1px solid #334155; border-radius: 14px; padding: 1.5rem; max-width: 400px; }\ndialog::backdrop { background: rgba(0, 0, 0, 0.7); }\nbutton { background: #10b981; color: #052e16; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; }", "starterJs": "// Wire #open-modal and #close-modal to #project-modal\n", "solutionHtml": "<button id=\"open-modal\">View Case Study</button>\n<dialog id=\"project-modal\">\n  <h3>TaskFlow Architecture</h3>\n  <p>Built with semantic HTML, CSS Grid, and zero external dependencies.</p>\n  <button id=\"close-modal\">Close</button>\n</dialog>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ndialog { background: #111827; color: #f8fafc; border: 1px solid #334155; border-radius: 14px; padding: 1.5rem; max-width: 400px; }\ndialog::backdrop { background: rgba(0, 0, 0, 0.7); }\nbutton { background: #10b981; color: #052e16; border: none; padding: 0.5rem 1rem; border-radius: 8px; font-weight: 700; cursor: pointer; }", "solutionJs": "const modal = document.querySelector('#project-modal');\ndocument.querySelector('#open-modal').addEventListener('click', () => modal.showModal());\ndocument.querySelector('#close-modal').addEventListener('click', () => modal.close());", "checks": [{"type": "exists", "selector": "dialog#project-modal", "msg": "Keep the <dialog id=\"project-modal\"> element in HTML."}, {"type": "jsIncludes", "text": "showModal", "msg": "Call .showModal() in script.js when #open-modal is clicked."}]}}, {"id": 25, "phase": 4, "phaseName": "Polish & Launch", "title": "Real-Time Search Input Filtering", "subtitle": "Filter articles or skills instantly as the user types", "duration": "14 min", "xp": 150, "concepts": [{"heading": "The 'input' Event & Case-Insensitive Matching", "body": "Listening to the 'input' event fires on every keystroke. Compare item.toLowerCase().includes(query.toLowerCase()) for smooth, forgiving search.", "code": "searchInput.addEventListener('input', (e) => {\n  const q = e.target.value.toLowerCase();\n  cards.forEach(c => {\n    c.hidden = !c.textContent.toLowerCase().includes(q);\n  });\n});"}], "takeaways": ["Using the HTML hidden attribute cleanly toggles element visibility.", "Always normalize both query and target text with .toLowerCase()."], "challenge": {"prompt": "Attach an 'input' event listener to #search-box that hides any .skill-item whose text does not include the typed search query.", "hint": "Inside searchBox.addEventListener('input', ...), loop through .skill-item elements and toggle el.hidden based on .toLowerCase().includes().", "starterHtml": "<input id=\"search-box\" type=\"search\" placeholder=\"Search skills (e.g. Grid, DOM)...\">\n<ul id=\"skill-list\">\n  <li class=\"skill-item\">HTML5 Semantic Landmarks</li>\n  <li class=\"skill-item\">CSS Grid & Flexbox</li>\n  <li class=\"skill-item\">JavaScript DOM Events</li>\n  <li class=\"skill-item\">LocalStorage Persistence</li>\n</ul>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #334155; background: #111827; color: #fff; margin-bottom: 1rem; }\nli { padding: 0.5rem 0; border-bottom: 1px solid #1e293b; }", "starterJs": "// Filter .skill-item elements on #search-box 'input' event\n", "solutionHtml": "<input id=\"search-box\" type=\"search\" placeholder=\"Search skills (e.g. Grid, DOM)...\">\n<ul id=\"skill-list\">\n  <li class=\"skill-item\">HTML5 Semantic Landmarks</li>\n  <li class=\"skill-item\">CSS Grid & Flexbox</li>\n  <li class=\"skill-item\">JavaScript DOM Events</li>\n  <li class=\"skill-item\">LocalStorage Persistence</li>\n</ul>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\ninput { width: 100%; padding: 0.6rem; border-radius: 8px; border: 1px solid #334155; background: #111827; color: #fff; margin-bottom: 1rem; }\nli { padding: 0.5rem 0; border-bottom: 1px solid #1e293b; }", "solutionJs": "const searchBox = document.querySelector('#search-box');\nconst items = document.querySelectorAll('.skill-item');\nsearchBox.addEventListener('input', () => {\n  const query = searchBox.value.toLowerCase().trim();\n  items.forEach(item => {\n    item.hidden = !item.textContent.toLowerCase().includes(query);\n  });\n});", "checks": [{"type": "jsIncludes", "text": "toLowerCase", "msg": "Normalize search comparisons with .toLowerCase()."}, {"type": "jsIncludes", "text": "input", "msg": "Listen for the 'input' event on #search-box."}]}}, {"id": 26, "phase": 4, "phaseName": "Polish & Launch", "title": "Reading Scroll Progress Bar", "subtitle": "Calculate scroll percentage and animate a top progress indicator", "duration": "14 min", "xp": 150, "concepts": [{"heading": "Measuring Document Scroll", "body": "Divide window.scrollY by (document.documentElement.scrollHeight - window.innerHeight) and multiply by 100 to get the exact scroll percentage.", "code": "window.addEventListener('scroll', () => {\n  const max = document.documentElement.scrollHeight - window.innerHeight;\n  const pct = max > 0 ? (window.scrollY / max) * 100 : 0;\n  bar.style.width = `${pct}%`;\n});"}], "takeaways": ["Guard against dividing by zero when a page is shorter than the viewport.", "Fixed top progress bars give long articles and portfolios clear visual orientation."], "challenge": {"prompt": "Listen to the window 'scroll' event in script.js and update #scroll-bar's style.width as a percentage from 0% to 100%.", "hint": "Calculate pct = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100 and set bar.style.width = pct + '%'.", "starterHtml": "<div id=\"scroll-bar\"></div>\n<main style=\"height: 1000px; padding-top: 2rem;\">\n  <h2>Scroll Progress Demo</h2>\n  <p>Scroll down inside this preview to watch the emerald progress bar fill across the top!</p>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; padding: 1.5rem; }\n#scroll-bar { position: fixed; top: 0; left: 0; height: 4px; width: 0%; background: #10b981; transition: width 0.1s linear; }", "starterJs": "// Update #scroll-bar width on window 'scroll'\n", "solutionHtml": "<div id=\"scroll-bar\"></div>\n<main style=\"height: 1000px; padding-top: 2rem;\">\n  <h2>Scroll Progress Demo</h2>\n  <p>Scroll down inside this preview to watch the emerald progress bar fill across the top!</p>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; margin: 0; padding: 1.5rem; }\n#scroll-bar { position: fixed; top: 0; left: 0; height: 4px; width: 0%; background: #10b981; transition: width 0.1s linear; }", "solutionJs": "const bar = document.querySelector('#scroll-bar');\nwindow.addEventListener('scroll', () => {\n  const scrollable = document.documentElement.scrollHeight - window.innerHeight;\n  const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;\n  bar.style.width = `${pct}%`;\n});", "checks": [{"type": "jsIncludes", "text": "scroll", "msg": "Attach a 'scroll' listener to window in script.js."}, {"type": "jsIncludes", "text": "style.width", "msg": "Update #scroll-bar's style.width dynamically."}]}}, {"id": 27, "phase": 4, "phaseName": "Polish & Launch", "title": "Async Functions, JSON & Error Handling", "subtitle": "Load structured JSON data safely with async/await and try/catch", "duration": "15 min", "xp": 160, "concepts": [{"heading": "async / await with try / catch", "body": "Modern web apps fetch JSON data asynchronously. Wrapping await calls in try { ... } catch (err) { ... } ensures network failures show a friendly message instead of crashing.", "code": "async function loadFeed() {\n  try {\n    const data = JSON.parse('{\"status\":\"Online\",\"latency\":\"18ms\"}');\n    statusEl.textContent = `${data.status} (${data.latency})`;\n  } catch (err) {\n    statusEl.textContent = 'Offline fallback active';\n  }\n}"}], "takeaways": ["Always wrap JSON.parse() and fetch() calls in try/catch blocks.", "Display loading states before async work completes."], "challenge": {"prompt": "Write an async function loadStats() using try/catch that parses rawJson with JSON.parse() and renders the stats inside #api-output.", "hint": "Parse rawJson inside try { const info = JSON.parse(rawJson); ... } and update #api-output.textContent.", "starterHtml": "<main>\n  <h3>Live Telemetry Widget</h3>\n  <p id=\"api-output\">Loading telemetry...</p>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }", "starterJs": "const rawJson = '{\"uptime\": \"99.9%\", \"builds\": 30}';\n// Write async function loadStats() with try/catch below\n", "solutionHtml": "<main>\n  <h3>Live Telemetry Widget</h3>\n  <p id=\"api-output\">Loading telemetry...</p>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }", "solutionJs": "const rawJson = '{\"uptime\": \"99.9%\", \"builds\": 30}';\nasync function loadStats() {\n  const out = document.querySelector('#api-output');\n  try {\n    const data = JSON.parse(rawJson);\n    out.textContent = `Uptime: ${data.uptime} • Completed Builds: ${data.builds}`;\n  } catch (err) {\n    out.textContent = 'Unable to load telemetry.';\n  }\n}\nloadStats();", "checks": [{"type": "jsIncludes", "text": "async", "msg": "Define an async function in script.js."}, {"type": "jsIncludes", "text": "try", "msg": "Wrap your JSON parsing in a try/catch block."}]}}, {"id": 28, "phase": 4, "phaseName": "Polish & Launch", "title": "Accessibility & Skip-to-Content Link", "subtitle": "Make your site effortless to navigate by keyboard and screen reader", "duration": "12 min", "xp": 150, "concepts": [{"heading": "Skip Links & ARIA Labels", "body": "A 'Skip to main content' link (<a href=\"#main-content\" class=\"skip-link\">) lets keyboard users bypass repeated navigation links in one keypress. Add aria-label to icon-only buttons.", "code": "<a href=\"#main-content\" class=\"skip-link\">Skip to content</a>\n<button aria-label=\"Close dialog\">✕</button>"}], "takeaways": ["Every icon-only button needs an aria-label describing its action.", "High color contrast and clear focus outlines benefit every visitor."], "challenge": {"prompt": "Add a skip link (<a href=\"#main-content\" class=\"skip-link\">Skip to content</a>) pointing to <main id=\"main-content\">, and add an aria-label to the icon button.", "hint": "Add <a href=\"#main-content\" class=\"skip-link\">Skip to content</a> at the top of <body> and aria-label=\"Settings\" on the button.", "starterHtml": "<!-- Add skip-link here -->\n<header>\n  <nav><a href=\"#about\">About</a><a href=\"#projects\">Projects</a></nav>\n  <button>⚙️</button>\n</header>\n<main id=\"main-content\">\n  <h1>Accessible Web Design</h1>\n</main>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.skip-link { color: #10b981; display: inline-block; margin-bottom: 1rem; }\na { color: #38bdf8; margin-right: 1rem; }", "starterJs": "", "solutionHtml": "<a href=\"#main-content\" class=\"skip-link\">Skip to content</a>\n<header>\n  <nav><a href=\"#about\">About</a><a href=\"#projects\">Projects</a></nav>\n  <button aria-label=\"Open settings\">⚙️</button>\n</header>\n<main id=\"main-content\">\n  <h1>Accessible Web Design</h1>\n</main>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }\n.skip-link { color: #10b981; display: inline-block; margin-bottom: 1rem; }\na { color: #38bdf8; margin-right: 1rem; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "a.skip-link[href='#main-content']", "msg": "Add <a href=\"#main-content\" class=\"skip-link\">Skip to content</a>."}, {"type": "exists", "selector": "button[aria-label]", "msg": "Add an aria-label attribute to the icon <button>."}]}}, {"id": 29, "phase": 4, "phaseName": "Polish & Launch", "title": "SEO Meta Tags & Social Sharing Cards", "subtitle": "Prepare your <head> with description and Open Graph metadata", "duration": "12 min", "xp": 150, "concepts": [{"heading": "Search & Social Preview Metadata", "body": "Adding <meta name=\"description\" content=\"...\"> helps search engines summarize your site, while Open Graph tags (<meta property=\"og:title\" ...>) control how links preview when shared.", "code": "<meta name=\"description\" content=\"Portfolio of DevCraft Studio.\">\n<meta property=\"og:title\" content=\"DevCraft Studio — Web Developer\">"}], "takeaways": ["Keep meta descriptions concise (120–155 characters) and accurate.", "Clean metadata makes your live Netlify or GitHub Pages link look polished when shared."], "challenge": {"prompt": "Inside <head>, add both <meta name=\"description\" content=\"...\"> and <meta property=\"og:title\" content=\"...\">.", "hint": "Inside <head>, add <meta name=\"description\" content=\"My custom portfolio website\"> and <meta property=\"og:title\" content=\"DevCraft Studio\">.", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DevCraft Studio</title>\n  <!-- Add meta description and og:title below -->\n  \n</head>\n<body>\n  <main><h1>Ready for Search & Social</h1><p>Metadata configured in &lt;head&gt;.</p></main>\n</body>\n</html>", "starterCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }", "starterJs": "", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>DevCraft Studio</title>\n  <meta name=\"description\" content=\"DevCraft Studio — Interactive web projects built with HTML, CSS, and JavaScript.\">\n  <meta property=\"og:title\" content=\"DevCraft Studio — Web Portfolio\">\n</head>\n<body>\n  <main><h1>Ready for Search & Social</h1><p>Metadata configured in &lt;head&gt;.</p></main>\n</body>\n</html>", "solutionCss": "body { background: #0b0f19; color: #f8fafc; font-family: system-ui, sans-serif; padding: 1.5rem; }", "solutionJs": "", "checks": [{"type": "exists", "selector": "head meta[name='description']", "msg": "Add <meta name=\"description\" content=\"...\"> inside <head>."}, {"type": "exists", "selector": "head meta[property='og:title']", "msg": "Add <meta property=\"og:title\" content=\"...\"> inside <head>."}]}}, {"id": 30, "phase": 4, "phaseName": "Polish & Launch", "title": "Final Assembly & Live Website Launch!", "subtitle": "Customize your complete website and export your deploy-ready .zip", "duration": "20 min", "xp": 250, "concepts": [{"heading": "You Built a Real Website!", "body": "Everything from Days 1–29 comes together here: semantic HTML5 landmarks, CSS custom properties, Flexbox & Grid, theme switching, live project filtering, and form validation.", "code": "<!-- Export your finished site as index.html + style.css + script.js -->\n<!-- Drag the extracted folder onto app.netlify.com/drop to go live! -->"}], "takeaways": ["Customize the name, bio, and projects in the starter website below to make it 100% yours.", "Click 'Download Website (.zip)' in the Playground or Settings to deploy your site free on Netlify Drop or GitHub Pages!"], "challenge": {"prompt": "Personalize your final website's <h1> brand name and projects, verify your header, projects grid, and contact form are all present, then complete Day 30 and export your .zip!", "hint": "Edit the <h1> text in index.html to your own name or studio, run the preview, and click Check & Complete!", "starterHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"description\" content=\"Personal web portfolio built in 30 days.\">\n  <title>My Web Portfolio</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <header class=\"navbar\">\n    <span class=\"brand\">DevCraft</span>\n    <nav class=\"nav-links\">\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n      <button id=\"theme-btn\" type=\"button\">Theme</button>\n    </nav>\n  </header>\n  <main class=\"container\">\n    <section id=\"about\" class=\"hero\">\n      <h1>Your Name Here</h1>\n      <p>Frontend builder crafting responsive, accessible websites with HTML, CSS &amp; JavaScript.</p>\n    </section>\n    <section id=\"projects\">\n      <h2>Featured Projects</h2>\n      <div id=\"project-list\" class=\"grid\"></div>\n    </section>\n    <section id=\"contact\">\n      <h2>Get in Touch</h2>\n      <form id=\"contact-form\">\n        <label for=\"visitor-name\">Name</label>\n        <input id=\"visitor-name\" type=\"text\" required>\n        <button type=\"submit\">Send Message</button>\n      </form>\n      <p id=\"form-status\"></p>\n    </section>\n  </main>\n  <footer>\n    <p>&copy; 2026 Built from scratch with Web30.</p>\n  </footer>\n  <script src=\"script.js\"><\/script>\n</body>\n</html>", "starterCss": ":root {\n  --bg: #0b0f19;\n  --surface: #111827;\n  --text: #f8fafc;\n  --muted: #94a3b8;\n  --accent: #10b981;\n}\nbody.light {\n  --bg: #f8fafc;\n  --surface: #ffffff;\n  --text: #0f172a;\n  --muted: #475569;\n}\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: system-ui, -apple-system, sans-serif;\n  background: var(--bg);\n  color: var(--text);\n  line-height: 1.6;\n  transition: background 0.2s, color 0.2s;\n}\n.navbar {\n  position: sticky;\n  top: 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 1.5rem;\n  background: var(--surface);\n  border-bottom: 1px solid rgba(148, 163, 184, 0.2);\n}\n.brand { font-weight: 800; color: var(--accent); }\n.nav-links { display: flex; align-items: center; gap: 1rem; }\na { color: var(--text); text-decoration: none; font-size: 0.95rem; }\n.container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }\n.hero { padding: 2rem 0; }\nh1 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 0.5rem; }\np { color: var(--muted); max-width: 65ch; }\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 1rem;\n  margin-top: 1rem;\n}\n.card {\n  background: var(--surface);\n  border: 1px solid rgba(148, 163, 184, 0.2);\n  border-radius: 12px;\n  padding: 1.25rem;\n  transition: transform 0.2s ease;\n}\n.card:hover { transform: translateY(-3px); }\nform { display: grid; gap: 0.6rem; max-width: 420px; }\ninput {\n  padding: 0.6rem;\n  border-radius: 8px;\n  border: 1px solid rgba(148, 163, 184, 0.3);\n  background: var(--surface);\n  color: var(--text);\n}\nbutton {\n  background: var(--accent);\n  color: #052e16;\n  border: none;\n  padding: 0.55rem 1rem;\n  border-radius: 8px;\n  font-weight: 700;\n  cursor: pointer;\n}\nfooter {\n  text-align: center;\n  padding: 2rem 1rem;\n  color: var(--muted);\n  font-size: 0.9rem;\n}", "starterJs": "const portfolioProjects = [\n  { title: 'TaskFlow App', desc: 'Responsive task tracker with localStorage.' },\n  { title: 'Pulse Weather', desc: 'Clean forecast interface with live JSON data.' },\n  { title: 'DevCraft Site', desc: 'This custom portfolio built over 30 days!' }\n];\n\nconst listEl = document.querySelector('#project-list');\nif (listEl) {\n  listEl.innerHTML = portfolioProjects.map(p => `\n    <article class=\"card\">\n      <h3>${p.title}</h3>\n      <p>${p.desc}</p>\n    </article>\n  `).join('');\n}\n\nconst themeBtn = document.querySelector('#theme-btn');\nif (themeBtn) {\n  themeBtn.addEventListener('click', () => document.body.classList.toggle('light'));\n}\n\nconst contactForm = document.querySelector('#contact-form');\nif (contactForm) {\n  contactForm.addEventListener('submit', (e) => {\n    e.preventDefault();\n    const name = document.querySelector('#visitor-name').value.trim();\n    document.querySelector('#form-status').textContent = name ? `Thanks, ${name}! Message received.` : 'Please enter your name.';\n  });\n}", "solutionHtml": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <meta name=\"description\" content=\"Personal web portfolio built in 30 days.\">\n  <title>DevCraft Studio — Portfolio</title>\n  <link rel=\"stylesheet\" href=\"style.css\">\n</head>\n<body>\n  <header class=\"navbar\">\n    <span class=\"brand\">DevCraft</span>\n    <nav class=\"nav-links\">\n      <a href=\"#about\">About</a>\n      <a href=\"#projects\">Projects</a>\n      <a href=\"#contact\">Contact</a>\n      <button id=\"theme-btn\" type=\"button\">Theme</button>\n    </nav>\n  </header>\n  <main class=\"container\">\n    <section id=\"about\" class=\"hero\">\n      <h1>DevCraft Studio</h1>\n      <p>Frontend builder crafting responsive, accessible websites with HTML, CSS &amp; JavaScript.</p>\n    </section>\n    <section id=\"projects\">\n      <h2>Featured Projects</h2>\n      <div id=\"project-list\" class=\"grid\"></div>\n    </section>\n    <section id=\"contact\">\n      <h2>Get in Touch</h2>\n      <form id=\"contact-form\">\n        <label for=\"visitor-name\">Name</label>\n        <input id=\"visitor-name\" type=\"text\" required>\n        <button type=\"submit\">Send Message</button>\n      </form>\n      <p id=\"form-status\"></p>\n    </section>\n  </main>\n  <footer>\n    <p>&copy; 2026 Built from scratch with Web30.</p>\n  </footer>\n  <script src=\"script.js\"><\/script>\n</body>\n</html>", "solutionCss": ":root {\n  --bg: #0b0f19;\n  --surface: #111827;\n  --text: #f8fafc;\n  --muted: #94a3b8;\n  --accent: #10b981;\n}\nbody.light {\n  --bg: #f8fafc;\n  --surface: #ffffff;\n  --text: #0f172a;\n  --muted: #475569;\n}\n* { box-sizing: border-box; }\nbody {\n  margin: 0;\n  font-family: system-ui, -apple-system, sans-serif;\n  background: var(--bg);\n  color: var(--text);\n  line-height: 1.6;\n  transition: background 0.2s, color 0.2s;\n}\n.navbar {\n  position: sticky;\n  top: 0;\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 1rem 1.5rem;\n  background: var(--surface);\n  border-bottom: 1px solid rgba(148, 163, 184, 0.2);\n}\n.brand { font-weight: 800; color: var(--accent); }\n.nav-links { display: flex; align-items: center; gap: 1rem; }\na { color: var(--text); text-decoration: none; font-size: 0.95rem; }\n.container { max-width: 900px; margin: 0 auto; padding: 1.5rem; }\n.hero { padding: 2rem 0; }\nh1 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 0.5rem; }\np { color: var(--muted); max-width: 65ch; }\n.grid {\n  display: grid;\n  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));\n  gap: 1rem;\n  margin-top: 1rem;\n}\n.card {\n  background: var(--surface);\n  border: 1px solid rgba(148, 163, 184, 0.2);\n  border-radius: 12px;\n  padding: 1.25rem;\n  transition: transform 0.2s ease;\n}\n.card:hover { transform: translateY(-3px); }\nform { display: grid; gap: 0.6rem; max-width: 420px; }\ninput {\n  padding: 0.6rem;\n  border-radius: 8px;\n  border: 1px solid rgba(148, 163, 184, 0.3);\n  background: var(--surface);\n  color: var(--text);\n}\nbutton {\n  background: var(--accent);\n  color: #052e16;\n  border: none;\n  padding: 0.55rem 1rem;\n  border-radius: 8px;\n  font-weight: 700;\n  cursor: pointer;\n}\nfooter {\n  text-align: center;\n  padding: 2rem 1rem;\n  color: var(--muted);\n  font-size: 0.9rem;\n}", "solutionJs": "const portfolioProjects = [\n  { title: 'TaskFlow App', desc: 'Responsive task tracker with localStorage.' },\n  { title: 'Pulse Weather', desc: 'Clean forecast interface with live JSON data.' },\n  { title: 'DevCraft Site', desc: 'This custom portfolio built over 30 days!' }\n];\n\nconst listEl = document.querySelector('#project-list');\nif (listEl) {\n  listEl.innerHTML = portfolioProjects.map(p => `\n    <article class=\"card\">\n      <h3>${p.title}</h3>\n      <p>${p.desc}</p>\n    </article>\n  `).join('');\n}\n\nconst themeBtn = document.querySelector('#theme-btn');\nif (themeBtn) {\n  themeBtn.addEventListener('click', () => document.body.classList.toggle('light'));\n}\n\nconst contactForm = document.querySelector('#contact-form');\nif (contactForm) {\n  contactForm.addEventListener('submit', (e) => {\n    e.preventDefault();\n    const name = document.querySelector('#visitor-name').value.trim();\n    document.querySelector('#form-status').textContent = name ? `Thanks, ${name}! Message received.` : 'Please enter your name.';\n  });\n}", "checks": [{"type": "exists", "selector": "header nav", "msg": "Keep your <header><nav> navigation bar."}, {"type": "exists", "selector": "main h1", "msg": "Include your main <h1> heading inside <main>."}, {"type": "exists", "selector": "form#contact-form", "msg": "Keep your #contact-form section."}, {"type": "exists", "selector": "footer", "msg": "Keep your <footer> element."}]}}];
+
+    const STORAGE_KEY = 'web30_app_state_v1';
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          return {
+            completedDays: Array.isArray(parsed.completedDays) ? parsed.completedDays : [],
+            xp: typeof parsed.xp === 'number' ? parsed.xp : 0,
+            streak: typeof parsed.streak === 'number' ? parsed.streak : 1,
+            activeTab: parsed.activeTab || 'curriculum',
+            activeDayId: parsed.activeDayId || null,
+            phaseFilter: parsed.phaseFilter || 'all',
+            playground: parsed.playground || {
+              html: LESSONS[29].starterHtml,
+              css: LESSONS[29].starterCss,
+              js: LESSONS[29].starterJs
+            },
+            chatHistory: Array.isArray(parsed.chatHistory) ? parsed.chatHistory : [
+              {
+                role: 'assistant',
+                text: 'Welcome to Web30! I am WebBuddy — your offline HTML, CSS & JavaScript mentor. Pick any day in Curriculum to start building your website step-by-step, or ask me anything about tags, Flexbox, Grid, DOM events, or deploying to Netlify!'
+              }
+            ]
+          };
+        }
+      } catch (e) {
+        console.warn('State reset due to storage error:', e);
+      }
+      return {
+        completedDays: [],
+        xp: 0,
+        streak: 1,
+        activeTab: 'curriculum',
+        activeDayId: null,
+        phaseFilter: 'all',
+        playground: {
+          html: LESSONS[29].starterHtml,
+          css: LESSONS[29].starterCss,
+          js: LESSONS[29].starterJs
+        },
+        chatHistory: [
+          {
+            role: 'assistant',
+            text: 'Welcome to Web30! I am WebBuddy — your offline HTML, CSS & JavaScript mentor. Pick any day in Curriculum to start building your website step-by-step, or ask me anything about tags, Flexbox, Grid, DOM events, or deploying to Netlify!'
+          }
+        ]
+      };
+    }
+
+    let state = loadState();
+    let editorFileTab = 'html';
+    let previewViewport = 'desktop';
+    let lessonDrafts = {};
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('Could not persist state:', e);
+      }
+      updateHeaderStats();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function updateHeaderStats() {
+      document.getElementById('header-streak').textContent = state.streak + 'd';
+      document.getElementById('header-xp').textContent = state.xp + ' XP';
+      document.querySelectorAll('.nav-tab').forEach(btn => {
+        const isActive = btn.dataset.tab === state.activeTab;
+        btn.className = isActive
+          ? 'nav-tab relative flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 transition'
+          : 'nav-tab relative flex flex-col items-center justify-center py-2 px-1 rounded-xl text-xs font-semibold text-slate-400 hover:text-slate-200 transition';
+      });
+    }
+
+    function buildSrcdoc(html, css, js, captureConsole = true) {
+      const safeJs = (js || '').replace(/<\/script>/gi, '<\/script>');
+      const consoleHook = captureConsole ? `
+        <script>
+          (function() {
+            const send = (type, args) => {
+              try {
+                window.parent.postMessage({
+                  source: 'web30-sandbox',
+                  type,
+                  text: Array.from(args).map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')
+                }, '*');
+              } catch (e) {}
+            };
+            const origLog = console.log;
+            const origErr = console.error;
+            console.log = function(...args) { send('log', args); origLog.apply(console, args); };
+            console.error = function(...args) { send('error', args); origErr.apply(console, args); };
+            window.onerror = function(msg, url, line) { send('error', ['Line ' + line + ': ' + msg]); };
+          })();
+        <\/script>
+      ` : '';
+
+      const hasDoctype = /<!DOCTYPE/i.test(html);
+      if (hasDoctype) {
+        let doc = html;
+        if (/<\/head>/i.test(doc)) {
+          doc = doc.replace(/<\/head>/i, `<style>${css || ''}</style>${consoleHook}</head>`);
+        } else {
+          doc = `<style>${css || ''}</style>${consoleHook}` + doc;
+        }
+        if (/<\/body>/i.test(doc)) {
+          doc = doc.replace(/<\/body>/i, `<scr` + `ipt>${safeJs}</scr` + `ipt></body>`);
+        } else {
+          doc += `<scr` + `ipt>${safeJs}</scr` + `ipt>`;
+        }
+        return doc;
+      }
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>${css || ''}</style>
+  ${consoleHook}
+</head>
+<body>
+  ${html || ''}
+  <script>${safeJs}<\/script>
+</body>
+</html>`;
+    }
+
+    function getLessonDraft(lesson) {
+      if (!lessonDrafts[lesson.id]) {
+        lessonDrafts[lesson.id] = {
+          html: lesson.challenge.starterHtml,
+          css: lesson.challenge.starterCss,
+          js: lesson.challenge.starterJs
+        };
+      }
+      return lessonDrafts[lesson.id];
+    }
+
+    function renderCurriculum() {
+      const main = document.getElementById('app-main');
+      if (state.activeDayId) {
+        const lesson = LESSONS.find(l => l.id === state.activeDayId);
+        if (lesson) {
+          renderLessonDetail(lesson);
+          return;
+        }
+      }
+
+      const completedCount = state.completedDays.length;
+      const pct = Math.round((completedCount / LESSONS.length) * 100);
+      const nextDay = LESSONS.find(l => !state.completedDays.includes(l.id)) || LESSONS[0];
+
+      const phases = [
+        { id: 'all', label: 'All 30 Days' },
+        { id: 1, label: '1. HTML' },
+        { id: 2, label: '2. CSS' },
+        { id: 3, label: '3. JS' },
+        { id: 4, label: '4. Launch' }
+      ];
+
+      const filtered = state.phaseFilter === 'all'
+        ? LESSONS
+        : LESSONS.filter(l => l.phase === state.phaseFilter);
+
+      main.innerHTML = `
+        <!-- Project Hero Card -->
+        <section class="rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-emerald-950/40 border border-slate-800 p-5 mb-5">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <span class="inline-block text-[11px] font-bold uppercase tracking-wider text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full mb-2">
+                Project-Based Track • Build Your Own Website
+              </span>
+              <h1 class="text-xl sm:text-2xl font-extrabold text-white tracking-tight">
+                From Blank File to Live Portfolio in 30 Days
+              </h1>
+              <p class="text-slate-400 text-sm mt-1 max-w-xl">
+                Every day adds a real section, responsive layout, or interactive JavaScript feature to your own deployable website.
+              </p>
+            </div>
+            <button id="continue-day-btn" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm shadow-lg shadow-emerald-500/20 transition shrink-0">
+              ${completedCount === 0 ? 'Start Day 1 →' : `Continue Day ${nextDay.id} →`}
+            </button>
+          </div>
+
+          <div class="mt-4">
+            <div class="flex justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-300">Website Build Progress: ${completedCount} / 30 Days</span>
+              <span class="text-emerald-400">${pct}%</span>
+            </div>
+            <div class="w-full h-2.5 rounded-full bg-slate-950 overflow-hidden border border-slate-800">
+              <div class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300" style="width: ${pct}%"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Phase Filters -->
+        <div class="flex gap-2 overflow-x-auto pb-2 mb-4">
+          ${phases.map(p => `
+            <button data-phase="${p.id}" class="phase-pill px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap border transition ${
+              state.phaseFilter === p.id
+                ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                : 'bg-slate-900 text-slate-300 border-slate-800 hover:border-slate-700'
+            }">
+              ${p.label}
+            </button>
+          `).join('')}
+        </div>
+
+        <!-- Daily Lesson Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          ${filtered.map(lesson => {
+            const done = state.completedDays.includes(lesson.id);
+            return `
+              <button data-day="${lesson.id}" class="day-card text-left rounded-2xl p-4 bg-slate-900/90 hover:bg-slate-900 border ${
+                done ? 'border-emerald-500/40' : 'border-slate-800 hover:border-slate-700'
+              } transition flex flex-col justify-between gap-3">
+                <div>
+                  <div class="flex items-center justify-between gap-2 mb-2">
+                    <span class="text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                      done ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-300'
+                    }">
+                      Day ${lesson.id} • ${lesson.phaseName}
+                    </span>
+                    <span class="text-xs font-bold ${done ? 'text-emerald-400' : 'text-slate-400'}">
+                      ${done ? '✓ Done' : `+${lesson.xp} XP`}
+                    </span>
+                  </div>
+                  <h2 class="font-bold text-base text-white">${escapeHtml(lesson.title)}</h2>
+                  <p class="text-xs text-slate-400 mt-1 line-clamp-2">${escapeHtml(lesson.subtitle)}</p>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-500 pt-2 border-t border-slate-800/80">
+                  <span>⏱ ${lesson.duration}</span>
+                  <span class="text-emerald-400 font-semibold">Open Builder →</span>
+                </div>
+              </button>
+            `;
+          }).join('')}
+        </div>
+      `;
+
+      document.getElementById('continue-day-btn').addEventListener('click', () => {
+        state.activeDayId = nextDay.id;
+        editorFileTab = 'html';
+        saveState();
+        renderCurriculum();
+      });
+
+      document.querySelectorAll('.phase-pill').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const val = btn.dataset.phase;
+          state.phaseFilter = val === 'all' ? 'all' : Number(val);
+          saveState();
+          renderCurriculum();
+        });
+      });
+
+      document.querySelectorAll('.day-card').forEach(card => {
+        card.addEventListener('click', () => {
+          state.activeDayId = Number(card.dataset.day);
+          editorFileTab = 'html';
+          saveState();
+          renderCurriculum();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+    }
+
+    function renderLessonDetail(lesson) {
+      const main = document.getElementById('app-main');
+      const draft = getLessonDraft(lesson);
+      const isCompleted = state.completedDays.includes(lesson.id);
+
+      main.innerHTML = `
+        <div class="mb-4 flex items-center justify-between gap-2">
+          <button id="back-to-curriculum" class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 border border-slate-800 px-3 py-2 rounded-xl transition">
+            ← All 30 Days
+          </button>
+          <div class="flex items-center gap-2">
+            ${lesson.id > 1 ? `<button id="prev-day-btn" class="text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 px-3 py-2 rounded-xl">‹ Day ${lesson.id - 1}</button>` : ''}
+            ${lesson.id < 30 ? `<button id="next-day-btn" class="text-xs font-semibold text-slate-300 bg-slate-900 border border-slate-800 px-3 py-2 rounded-xl">Day ${lesson.id + 1} ›</button>` : ''}
+          </div>
+        </div>
+
+        <!-- Lesson Header -->
+        <section class="rounded-2xl bg-slate-900 border border-slate-800 p-5 mb-4">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              Day ${lesson.id} of 30 • Phase ${lesson.phase}: ${lesson.phaseName}
+            </span>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full ${
+              isCompleted ? 'bg-emerald-500/20 text-emerald-300' : 'bg-amber-500/15 text-amber-300'
+            }">
+              ${isCompleted ? '✓ Completed' : `Reward: +${lesson.xp} XP`}
+            </span>
+          </div>
+          <h1 class="text-xl sm:text-2xl font-extrabold text-white">${escapeHtml(lesson.title)}</h1>
+          <p class="text-sm text-slate-400 mt-1">${escapeHtml(lesson.subtitle)}</p>
+        </section>
+
+        <!-- Concepts & Code Examples -->
+        <section class="space-y-3 mb-4">
+          ${lesson.concepts.map(c => `
+            <div class="rounded-2xl bg-slate-900/80 border border-slate-800 p-4">
+              <h2 class="font-bold text-sm text-emerald-400 mb-1">${escapeHtml(c.heading)}</h2>
+              <p class="text-sm text-slate-300 leading-relaxed mb-3">${escapeHtml(c.body)}</p>
+              <pre class="rounded-xl bg-slate-950 border border-slate-800 p-3 text-xs font-mono text-slate-200 overflow-x-auto"><code>${escapeHtml(c.code)}</code></pre>
+            </div>
+          `).join('')}
+        </section>
+
+        <!-- Key Takeaways -->
+        <section class="rounded-2xl bg-slate-900/60 border border-slate-800 p-4 mb-5">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Key Takeaways</h3>
+          <ul class="space-y-1.5 text-sm text-slate-300 list-disc list-inside">
+            ${lesson.takeaways.map(t => `<li>${escapeHtml(t)}</li>`).join('')}
+          </ul>
+        </section>
+
+        <!-- Interactive Project Step Builder -->
+        <section class="rounded-2xl bg-slate-900 border border-emerald-500/30 p-4 sm:p-5 mb-6">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">
+              🛠 Day ${lesson.id} Website Build Task
+            </span>
+            <div class="flex gap-2">
+              <button id="toggle-hint-btn" class="text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/30 px-2.5 py-1 rounded-lg">
+                💡 Hint
+              </button>
+              <button id="apply-solution-btn" class="text-xs font-semibold text-sky-300 bg-sky-500/10 border border-sky-500/30 px-2.5 py-1 rounded-lg">
+                ✨ Load Solution
+              </button>
+              <button id="reset-day-btn" class="text-xs font-semibold text-slate-400 bg-slate-800 px-2.5 py-1 rounded-lg">
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+
+          <p class="text-sm text-slate-200 mb-3">${escapeHtml(lesson.challenge.prompt)}</p>
+
+          <div id="hint-box" class="hidden rounded-xl bg-amber-500/10 border border-amber-500/30 p-3 text-xs text-amber-200 mb-3">
+            <strong>Hint:</strong> ${escapeHtml(lesson.challenge.hint)}
+          </div>
+
+          <!-- File Tabs (index.html | style.css | script.js) -->
+          <div class="flex items-center justify-between border-b border-slate-800 mb-2">
+            <div class="flex gap-1">
+              <button data-file="html" class="file-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">
+                index.html
+              </button>
+              <button data-file="css" class="file-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">
+                style.css
+              </button>
+              <button data-file="js" class="file-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">
+                script.js
+              </button>
+            </div>
+            <span class="text-[11px] text-slate-500 font-mono">Live Sandbox</span>
+          </div>
+
+          <textarea id="lesson-code-input" rows="11" spellcheck="false" class="code-editor w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:outline-none p-3.5 text-xs sm:text-sm text-slate-100 mb-3"></textarea>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-2 mb-3">
+            <button id="run-lesson-btn" class="flex-1 sm:flex-none px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs transition">
+              ▶ Run &amp; Refresh Preview
+            </button>
+            <button id="check-lesson-btn" class="flex-1 sm:flex-none px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition">
+              ✓ Check &amp; Complete (+${lesson.xp} XP)
+            </button>
+          </div>
+
+          <div id="check-feedback" class="hidden rounded-xl p-3 text-xs font-medium mb-3"></div>
+
+          <!-- Live Rendered Website Frame -->
+          <div class="rounded-xl overflow-hidden border border-slate-700 bg-white">
+            <div class="bg-slate-950 px-3 py-1.5 border-b border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500/80"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500/80"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></span>
+                <span class="ml-1.5 font-mono">Live Website Preview</span>
+              </div>
+              <span>Day ${lesson.id} Output</span>
+            </div>
+            <iframe id="lesson-preview-frame" title="Lesson Website Preview" sandbox="allow-scripts allow-same-origin allow-modals" class="w-full h-72 bg-white"></iframe>
+          </div>
+        </section>
+      `;
+
+      const textarea = document.getElementById('lesson-code-input');
+      const iframe = document.getElementById('lesson-preview-frame');
+
+      function syncEditorTab() {
+        document.querySelectorAll('.file-tab').forEach(btn => {
+          const active = btn.dataset.file === editorFileTab;
+          btn.className = active
+            ? 'file-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 border-emerald-400 text-emerald-400 bg-slate-950'
+            : 'file-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        });
+        textarea.value = draft[editorFileTab] || '';
+      }
+
+      function refreshPreview() {
+        iframe.srcdoc = buildSrcdoc(draft.html, draft.css, draft.js, false);
+      }
+
+      syncEditorTab();
+      refreshPreview();
+
+      textarea.addEventListener('input', () => {
+        draft[editorFileTab] = textarea.value;
+      });
+
+      document.querySelectorAll('.file-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          draft[editorFileTab] = textarea.value;
+          editorFileTab = btn.dataset.file;
+          syncEditorTab();
+        });
+      });
+
+      document.getElementById('run-lesson-btn').addEventListener('click', () => {
+        draft[editorFileTab] = textarea.value;
+        refreshPreview();
+      });
+
+      document.getElementById('toggle-hint-btn').addEventListener('click', () => {
+        document.getElementById('hint-box').classList.toggle('hidden');
+      });
+
+      document.getElementById('reset-day-btn').addEventListener('click', () => {
+        lessonDrafts[lesson.id] = {
+          html: lesson.challenge.starterHtml,
+          css: lesson.challenge.starterCss,
+          js: lesson.challenge.starterJs
+        };
+        Object.assign(draft, lessonDrafts[lesson.id]);
+        syncEditorTab();
+        refreshPreview();
+      });
+
+      document.getElementById('apply-solution-btn').addEventListener('click', () => {
+        draft.html = lesson.challenge.solutionHtml;
+        draft.css = lesson.challenge.solutionCss;
+        draft.js = lesson.challenge.solutionJs;
+        syncEditorTab();
+        refreshPreview();
+      });
+
+      document.getElementById('check-lesson-btn').addEventListener('click', () => {
+        draft[editorFileTab] = textarea.value;
+        refreshPreview();
+        setTimeout(() => verifyLesson(lesson, draft, iframe), 120);
+      });
+
+      document.getElementById('back-to-curriculum').addEventListener('click', () => {
+        state.activeDayId = null;
+        saveState();
+        renderCurriculum();
+      });
+
+      const prevBtn = document.getElementById('prev-day-btn');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          state.activeDayId = lesson.id - 1;
+          editorFileTab = 'html';
+          saveState();
+          renderCurriculum();
+        });
+      }
+
+      const nextBtn = document.getElementById('next-day-btn');
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          state.activeDayId = lesson.id + 1;
+          editorFileTab = 'html';
+          saveState();
+          renderCurriculum();
+        });
+      }
+    }
+
+    function verifyLesson(lesson, draft, iframe) {
+      const feedback = document.getElementById('check-feedback');
+      const doc = iframe.contentDocument;
+      const errors = [];
+
+      for (const rule of lesson.challenge.checks) {
+        if (rule.type === 'exists') {
+          if (!doc || !doc.querySelector(rule.selector)) {
+            errors.push(rule.msg);
+          }
+        } else if (rule.type === 'minCount') {
+          const found = doc ? doc.querySelectorAll(rule.selector).length : 0;
+          if (found < rule.count) {
+            errors.push(rule.msg);
+          }
+        } else if (rule.type === 'cssIncludes') {
+          if (!(draft.css || '').includes(rule.text)) {
+            errors.push(rule.msg);
+          }
+        } else if (rule.type === 'jsIncludes') {
+          if (!(draft.js || '').includes(rule.text)) {
+            errors.push(rule.msg);
+          }
+        } else if (rule.type === 'textEquals') {
+          const el = doc ? doc.querySelector(rule.selector) : null;
+          if (!el || el.textContent.trim() !== rule.expected) {
+            errors.push(rule.msg);
+          }
+        } else if (rule.type === 'clickTogglesClass') {
+          const btn = doc ? doc.querySelector(rule.clickSelector) : null;
+          const target = doc ? doc.querySelector(rule.targetSelector) : null;
+          if (!btn || !target) {
+            errors.push(rule.msg);
+          } else {
+            const before = target.classList.contains(rule.className);
+            btn.click();
+            const after = target.classList.contains(rule.className);
+            if (before === after) {
+              errors.push(rule.msg);
+            } else {
+              btn.click();
+            }
+          }
+        }
+      }
+
+      feedback.classList.remove('hidden');
+      if (errors.length > 0) {
+        feedback.className = 'rounded-xl p-3 text-xs font-medium mb-3 bg-rose-500/15 border border-rose-500/40 text-rose-200';
+        feedback.innerHTML = '<strong>Almost there! Check these items:</strong><ul class="list-disc list-inside mt-1 space-y-1">' +
+          errors.map(e => `<li>${escapeHtml(e)}</li>`).join('') + '</ul>';
+        return;
+      }
+
+      const firstTime = !state.completedDays.includes(lesson.id);
+      if (firstTime) {
+        state.completedDays.push(lesson.id);
+        state.xp += lesson.xp;
+      }
+      state.playground = {
+        html: draft.html,
+        css: draft.css,
+        js: draft.js
+      };
+      saveState();
+
+      feedback.className = 'rounded-xl p-3.5 text-xs font-medium mb-3 bg-emerald-500/15 border border-emerald-500/40 text-emerald-200 flex flex-wrap items-center justify-between gap-2';
+      feedback.innerHTML = `
+        <div>
+          <strong>🎉 Day ${lesson.id} Passed!</strong> ${firstTime ? `Earned +${lesson.xp} XP and synced to your Playground website.` : 'Website synced to Playground.'}
+        </div>
+        ${lesson.id < 30 ? `<button id="advance-next-btn" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold">Next: Day ${lesson.id + 1} →</button>` : `<button id="export-win-btn" class="px-3 py-1.5 rounded-lg bg-emerald-500 text-slate-950 font-bold">📦 Export Finished Website (.zip)</button>`}
+      `;
+
+      const advBtn = document.getElementById('advance-next-btn');
+      if (advBtn) {
+        advBtn.addEventListener('click', () => {
+          state.activeDayId = lesson.id + 1;
+          editorFileTab = 'html';
+          saveState();
+          renderCurriculum();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+
+      const expBtn = document.getElementById('export-win-btn');
+      if (expBtn) {
+        expBtn.addEventListener('click', exportWebsiteZip);
+      }
+    }
+
+    function renderPlayground() {
+      const main = document.getElementById('app-main');
+      main.innerHTML = `
+        <section class="rounded-2xl bg-slate-900 border border-slate-800 p-4 sm:p-5 mb-5">
+          <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div>
+              <h1 class="text-lg sm:text-xl font-extrabold text-white">Website Studio Playground</h1>
+              <p class="text-xs text-slate-400">Edit your live portfolio code freely and export as a deploy-ready .zip package.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button id="pg-export-btn" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition">
+                📦 Export Website (.zip)
+              </button>
+            </div>
+          </div>
+
+          <!-- File Switcher -->
+          <div class="flex items-center justify-between border-b border-slate-800 mb-2">
+            <div class="flex gap-1">
+              <button data-pgfile="html" class="pg-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">index.html</button>
+              <button data-pgfile="css" class="pg-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">style.css</button>
+              <button data-pgfile="js" class="pg-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 transition">script.js</button>
+            </div>
+            <button id="pg-run-btn" class="px-3 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-emerald-400 font-bold text-xs">
+              ▶ Run Preview
+            </button>
+          </div>
+
+          <textarea id="pg-editor" rows="12" spellcheck="false" class="code-editor w-full rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:outline-none p-3.5 text-xs sm:text-sm text-slate-100 mb-3"></textarea>
+
+          <!-- Responsive Preview Controls -->
+          <div class="rounded-xl overflow-hidden border border-slate-700 bg-slate-950">
+            <div class="px-3 py-2 border-b border-slate-800 flex items-center justify-between text-xs">
+              <span class="font-mono text-slate-400">Live Preview</span>
+              <div class="flex gap-1.5">
+                <button id="vp-mobile" class="px-2.5 py-1 rounded-md text-[11px] font-semibold ${previewViewport === 'mobile' ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                  📱 Mobile (375px)
+                </button>
+                <button id="vp-desktop" class="px-2.5 py-1 rounded-md text-[11px] font-semibold ${previewViewport === 'desktop' ? 'bg-emerald-500 text-slate-950' : 'bg-slate-800 text-slate-300'}">
+                  🖥 Desktop (100%)
+                </button>
+              </div>
+            </div>
+            <div class="flex justify-center bg-slate-900/80 p-2">
+              <iframe id="pg-frame" title="Playground Live Preview" sandbox="allow-scripts allow-same-origin allow-modals" class="bg-white rounded-lg transition-all duration-200 h-80 ${previewViewport === 'mobile' ? 'w-[375px] max-w-full' : 'w-full'}"></iframe>
+            </div>
+          </div>
+
+          <!-- Sandbox Console Output -->
+          <div class="mt-3 rounded-xl bg-slate-950 border border-slate-800 p-3">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[11px] font-mono font-bold uppercase tracking-wider text-slate-400">Console Output</span>
+              <button id="clear-console-btn" class="text-[11px] text-slate-500 hover:text-slate-300">Clear</button>
+            </div>
+            <div id="pg-console" class="font-mono text-xs text-slate-300 space-y-1 max-h-28 overflow-y-auto">
+              <div class="text-slate-500">Ready — console.log() messages from your website appear here.</div>
+            </div>
+          </div>
+        </section>
+      `;
+
+      let pgFile = 'html';
+      const pgEditor = document.getElementById('pg-editor');
+      const pgFrame = document.getElementById('pg-frame');
+
+      function syncPgTab() {
+        document.querySelectorAll('.pg-tab').forEach(btn => {
+          const active = btn.dataset.pgfile === pgFile;
+          btn.className = active
+            ? 'pg-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 border-emerald-400 text-emerald-400 bg-slate-950'
+            : 'pg-tab px-3 py-2 text-xs font-mono font-semibold rounded-t-lg border-b-2 border-transparent text-slate-400 hover:text-slate-200';
+        });
+        pgEditor.value = state.playground[pgFile] || '';
+      }
+
+      function runPg() {
+        document.getElementById('pg-console').innerHTML = '<div class="text-slate-500">Running preview...</div>';
+        pgFrame.srcdoc = buildSrcdoc(state.playground.html, state.playground.css, state.playground.js, true);
+      }
+
+      syncPgTab();
+      runPg();
+
+      pgEditor.addEventListener('input', () => {
+        state.playground[pgFile] = pgEditor.value;
+        saveState();
+      });
+
+      document.querySelectorAll('.pg-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.playground[pgFile] = pgEditor.value;
+          pgFile = btn.dataset.pgfile;
+          syncPgTab();
+        });
+      });
+
+      document.getElementById('pg-run-btn').addEventListener('click', runPg);
+      document.getElementById('pg-export-btn').addEventListener('click', exportWebsiteZip);
+      document.getElementById('clear-console-btn').addEventListener('click', () => {
+        document.getElementById('pg-console').innerHTML = '';
+      });
+
+      document.getElementById('vp-mobile').addEventListener('click', () => {
+        previewViewport = 'mobile';
+        renderPlayground();
+      });
+      document.getElementById('vp-desktop').addEventListener('click', () => {
+        previewViewport = 'desktop';
+        renderPlayground();
+      });
+    }
+
+    function renderProgress() {
+      const main = document.getElementById('app-main');
+      const done = state.completedDays.length;
+      const pct = Math.round((done / 30) * 100);
+
+      const badges = [
+        { title: 'HTML Architect', desc: 'Complete Phase 1 (Days 1–7)', unlocked: [1,2,3,4,5,6,7].every(d => state.completedDays.includes(d)) },
+        { title: 'CSS Stylist', desc: 'Complete Phase 2 (Days 8–15)', unlocked: [8,9,10,11,12,13,14,15].every(d => state.completedDays.includes(d)) },
+        { title: 'DOM Engineer', desc: 'Complete Phase 3 (Days 16–23)', unlocked: [16,17,18,19,20,21,22,23].every(d => state.completedDays.includes(d)) },
+        { title: 'Website Launcher', desc: 'Complete Day 30 & Launch', unlocked: state.completedDays.includes(30) }
+      ];
+
+      main.innerHTML = `
+        <section class="grid grid-cols-3 gap-3 mb-5">
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-4 text-center">
+            <div class="text-2xl font-extrabold text-emerald-400">${done}/30</div>
+            <div class="text-xs text-slate-400 mt-1">Days Built</div>
+          </div>
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-4 text-center">
+            <div class="text-2xl font-extrabold text-amber-400">${state.xp}</div>
+            <div class="text-xs text-slate-400 mt-1">Total XP</div>
+          </div>
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 p-4 text-center">
+            <div class="text-2xl font-extrabold text-sky-400">${pct}%</div>
+            <div class="text-xs text-slate-400 mt-1">Site Ready</div>
+          </div>
+        </section>
+
+        <!-- Badges -->
+        <section class="rounded-2xl bg-slate-900 border border-slate-800 p-5 mb-5">
+          <h2 class="font-bold text-base text-white mb-3">Milestone Badges</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            ${badges.map(b => `
+              <div class="p-3.5 rounded-xl border ${b.unlocked ? 'bg-emerald-500/10 border-emerald-500/40' : 'bg-slate-950/60 border-slate-800 opacity-60'} flex items-center gap-3">
+                <div class="text-2xl">${b.unlocked ? '🏆' : '🔒'}</div>
+                <div>
+                  <div class="font-bold text-sm text-white">${b.title}</div>
+                  <div class="text-xs text-slate-400">${b.desc}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- 30-Day Heatmap Grid -->
+        <section class="rounded-2xl bg-slate-900 border border-slate-800 p-5">
+          <h2 class="font-bold text-base text-white mb-3">30-Day Build Map</h2>
+          <div class="grid grid-cols-6 sm:grid-cols-10 gap-2">
+            ${LESSONS.map(l => {
+              const ok = state.completedDays.includes(l.id);
+              return `
+                <button data-jumpday="${l.id}" class="jump-day aspect-square rounded-xl font-mono text-xs font-bold flex items-center justify-center border transition ${
+                  ok
+                    ? 'bg-emerald-500 text-slate-950 border-emerald-400'
+                    : 'bg-slate-950 text-slate-400 border-slate-800 hover:border-slate-600'
+                }">
+                  ${l.id}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </section>
+      `;
+
+      document.querySelectorAll('.jump-day').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.activeDayId = Number(btn.dataset.jumpday);
+          state.activeTab = 'curriculum';
+          saveState();
+          renderActiveTab();
+        });
+      });
+    }
+
+    function generateBuddyReply(question) {
+      const q = question.toLowerCase();
+      if (q.includes('netlify') || q.includes('deploy') || q.includes('host') || q.includes('publish')) {
+        return 'To publish your website for free: 1) Tap "Export Website (.zip)" in Playground or Settings. 2) Unzip the folder on your phone or PC so you see index.html, style.css, and script.js. 3) Drag that folder onto app.netlify.com/drop (or upload the files to a GitHub repo and enable GitHub Pages). Your site goes live on HTTPS in seconds!';
+      }
+      if (q.includes('flex') || q.includes('center') || q.includes('align')) {
+        return 'Flexbox quick formula: Put `display: flex; justify-content: space-between; align-items: center; gap: 1rem;` on the parent container. `justify-content` controls horizontal spacing along the row, while `align-items` centers items vertically.';
+      }
+      if (q.includes('grid') || q.includes('column') || q.includes('card')) {
+        return 'For responsive project cards with zero media queries, use CSS Grid: `display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;`. Columns wrap automatically on narrow phone screens!';
+      }
+      if (q.includes('dom') || q.includes('queryselector') || q.includes('click') || q.includes('event')) {
+        return 'To make a button interactive in JavaScript: 1) Grab it with `const btn = document.querySelector("#my-btn");` 2) Attach a listener: `btn.addEventListener("click", () => { /* update DOM or toggle a class */ });`. Check the Console Output box in Playground if anything logs an error.';
+      }
+      if (q.includes('hint') || q.includes('stuck') || q.includes('help')) {
+        const current = LESSONS.find(l => l.id === state.activeDayId) || LESSONS.find(l => !state.completedDays.includes(l.id)) || LESSONS[0];
+        return `For Day ${current.id} (${current.title}): ${current.challenge.hint}`;
+      }
+      return 'Great question! Here is the core workflow: structure content semantically in index.html (<header>, <main>, <section>, <article>, <footer>), style layouts with CSS variables + Flexbox/Grid in style.css, and wire up user interactions with querySelector + addEventListener in script.js. Ask about Flexbox, Grid, forms, localStorage, or Netlify deployment anytime!';
+    }
+
+    function renderWebBuddy() {
+      const main = document.getElementById('app-main');
+      const quickPrompts = [
+        'Give me a hint for my current lesson',
+        'How do I center items with Flexbox?',
+        'How does responsive CSS Grid work?',
+        'How do I deploy my site to Netlify?'
+      ];
+
+      main.innerHTML = `
+        <section class="rounded-2xl bg-slate-900 border border-slate-800 p-4 sm:p-5 flex flex-col h-[calc(100vh-11.5rem)] min-h-[420px]">
+          <div class="flex items-center justify-between pb-3 mb-3 border-b border-slate-800">
+            <div class="flex items-center gap-2.5">
+              <div class="w-9 h-9 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-bold">
+                ✨
+              </div>
+              <div>
+                <h1 class="font-bold text-sm text-white">WebBuddy AI Tutor</h1>
+                <p class="text-[11px] text-emerald-400">Built-in Offline Web Mentor • Instant Answers</p>
+              </div>
+            </div>
+            <button id="clear-chat-btn" class="text-xs text-slate-400 hover:text-white px-2.5 py-1 rounded-lg bg-slate-800">
+              Clear
+            </button>
+          </div>
+
+          <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 pr-1 mb-3">
+            ${state.chatHistory.map(m => `
+              <div class="flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}">
+                <div class="max-w-[85%] rounded-2xl px-3.5 py-2.5 text-xs sm:text-sm leading-relaxed ${
+                  m.role === 'user'
+                    ? 'bg-emerald-500 text-slate-950 font-medium'
+                    : 'bg-slate-950 border border-slate-800 text-slate-200'
+                }">
+                  ${escapeHtml(m.text)}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="flex gap-1.5 overflow-x-auto pb-2 mb-2">
+            ${quickPrompts.map(q => `
+              <button class="quick-q text-[11px] whitespace-nowrap px-2.5 py-1.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300 hover:border-emerald-500/40">
+                ${escapeHtml(q)}
+              </button>
+            `).join('')}
+          </div>
+
+          <form id="buddy-form" class="flex gap-2">
+            <input id="buddy-input" type="text" placeholder="Ask about HTML, CSS, JS, or deploying..." class="flex-1 rounded-xl bg-slate-950 border border-slate-800 focus:border-emerald-500 focus:outline-none px-3.5 py-2.5 text-xs sm:text-sm text-white" />
+            <button type="submit" class="px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs">
+              Send
+            </button>
+          </form>
+        </section>
+      `;
+
+      const msgBox = document.getElementById('chat-messages');
+      msgBox.scrollTop = msgBox.scrollHeight;
+
+      function sendQuestion(text) {
+        const clean = text.trim();
+        if (!clean) return;
+        state.chatHistory.push({ role: 'user', text: clean });
+        state.chatHistory.push({ role: 'assistant', text: generateBuddyReply(clean) });
+        saveState();
+        renderWebBuddy();
+      }
+
+      document.getElementById('buddy-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+      const input = document.getElementById('buddy-input');
+      sendQuestion(input.value);
+    });
+
+    document.querySelectorAll('.quick-q').forEach(btn => {
+      btn.addEventListener('click', () => sendQuestion(btn.textContent));
+    });
+
+    document.getElementById('clear-chat-btn').addEventListener('click', () => {
+      state.chatHistory = [state.chatHistory[0]];
+      saveState();
+      renderWebBuddy();
+    });
+  }
+
+  async function exportWebsiteZip() {
+    const html = state.playground.html || LESSONS[29].starterHtml;
+    const css = state.playground.css || LESSONS[29].starterCss;
+    const js = state.playground.js || LESSONS[29].starterJs;
+    const readme = `# My Website (Built with Web30)
+
+Deploy free in 10 seconds:
+1. Visit https://app.netlify.com/drop and drag this folder onto the page.
+2. Or upload index.html, style.css, and script.js to a public GitHub repository and enable GitHub Pages.
+`;
+
+    if (window.JSZip) {
+      const zip = new JSZip();
+      zip.file('index.html', html);
+      zip.file('style.css',
+      css);
+        zip.file('script.js', js);
+        zip.file('README.md', readme);
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'my-website-web30.zip';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } else {
+        const standalone = buildSrcdoc(html, css, js, false);
+        const blob = new Blob([standalone], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'index.html';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+    }
+
+    function renderActiveTab() {
+      updateHeaderStats();
+      if (state.activeTab === 'curriculum') renderCurriculum();
+      else if (state.activeTab === 'playground') renderPlayground();
+      else if (state.activeTab === 'progress') renderProgress();
+      else if (state.activeTab === 'webbuddy') renderWebBuddy();
+    }
+
+    // Wire bottom navigation tabs
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.activeTab = btn.dataset.tab;
+        saveState();
+        renderActiveTab();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Wire sandbox console listener
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.source === 'web30-sandbox') {
+        const consoleEl = document.getElementById('pg-console');
+        if (consoleEl) {
+          const line = document.createElement('div');
+          line.className = event.data.type === 'error' ? 'text-rose-400' : 'text-emerald-300';
+          line.textContent = (event.data.type === 'error' ? '✖ ' : '› ') + event.data.text;
+          consoleEl.appendChild(line);
+          consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+      }
+    });
+
+    // Wire Settings modal
+    const settingsModal = document.getElementById('settings-modal');
+    document.getElementById('open-settings-btn').addEventListener('click', () => settingsModal.showModal());
+    document.getElementById('close-settings-btn').addEventListener('click', () => settingsModal.close());
+    document.getElementById('settings-export-btn').addEventListener('click', exportWebsiteZip);
+    document.getElementById('reset-progress-btn').addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      state = loadState();
+      lessonDrafts = {};
+      settingsModal.close();
+      renderActiveTab();
+    });
+
+    // Boot app immediately
+    renderActiveTab();
+  </script>
+</body>
+</html>
