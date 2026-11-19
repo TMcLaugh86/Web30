@@ -38,7 +38,7 @@ Because Web30 is built with zero build tools or backend dependencies, you can ru
 Serving the file over `http://localhost` allows `localStorage` to persist your XP, streaks, and playground code between sessions:
 
 ```bash
-git clone [https://github.com/YOUR_USERNAME/web30.git](https://github.com/YOUR_USERNAME/web30.git)
+git clone [https://github.com/tmclaugh86/web30.git](https://github.com/YOUR_USERNAME/web30.git)
 cd web30
 python3 -m http.server 8000
 # Web30
